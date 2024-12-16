@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+    <style>
+        .form-container {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            background-color: #f9f9f9;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        /* Normal input style */
+        input {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            outline: none;
+        }
+        /* Error input style */
+        /* Error message style */
+        .error-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red;
+            font-size: 12px;
+            margin-bottom: 5px; /* Space between error message and input */
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body th:data-error-state="${state ?: 'NO_ERROR'}">
+<form
+        id="form"
+        th:action="@{/recover}"
+        method="post"
+        class="form-container"
+>
+
+    <p class="error-text" id="message_error"></p>
+    <p>Enter email:</p>
+    <div id="email-container">
+        <label for="email"></label><input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Email"
+            onblur="handleInputBlur(this)"
+            oninput="handleInput(this)"
+    />
+    </div>
+    <div>
+        <button type="submit">Find</button>
+    </div>
+</form>
+<script th:inline="javascript">
+    function handleInput(input) {
+        input.classList.remove("input-error");
+        const errorText = document.querySelector(".error-text");
+        if (errorText) {
+            errorText.textContent = "";
+        }
+    }
+    // -------------View base response from server------------------//
+    const errorMessage = document.getElementById("message_error");
+    const errorState = document.body.getAttribute("data-error-state");
+    function handleErrorState(state) {
+        //Hàm này input vào state view cho từng trạng thái lỗi từ server
+        if (state === "NOT_FOUND") {
+            //Thêm class css,data,....
+            alert("Email not found");
+            errorMessage.textContent = "Email not found";
+            document.querySelector('input[name="email"]')
+                .classList.add("input-error");
+        }
+
+    }
+    // Call the function with the current state
+    handleErrorState(errorState);
+    //-----------------------------Validate user input, check trống------------------//
+    document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        // Get form inputs
+        const email = document.getElementById("email");
+        let isValid = true;
+        if (email.value.trim() === "") {
+            email.classList.add("input-error");
+            errorMessage.textContent = "Missing email";
+            isValid = false;
+        }
+        if (validateEmail(email.value) === false) {
+            email.classList.add("input-error");
+            errorMessage.textContent = "Invalid Email";
+            isValid = false;
+        }
+        // If validation recover.htmles, submit the form
+        if (isValid) {
+            this.submit();
+        }
+    });
+    // Email validation function
+    function validateEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
+</script>
+</body>
+</html>
