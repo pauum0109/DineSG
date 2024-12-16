@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Bootstrap Simple Data Table</title>
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .row label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .row select {
+            width: 100%;
+        }
+        body {
+            color: #566787;
+            background: #f5f5f5;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .table-responsive {
+            margin: 30px 0;
+        }
+
+        .table-wrapper {
+            min-width: 1000px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-title {
+            padding-bottom: 10px;
+            margin: 0 0 10px;
+        }
+
+        .table-title h2 {
+            margin: 8px 0 0;
+            font-size: 22px;
+        }
+
+        .search-box {
+            position: relative;
+            float: right;
+        }
+
+        .search-box input {
+            height: 34px;
+            border-radius: 20px;
+            padding-left: 35px;
+            border-color: #ddd;
+            box-shadow: none;
+        }
+
+        .search-box input:focus {
+            border-color: #3fbae4;
+        }
+
+        .search-box i {
+            color: #a0a5b1;
+            position: absolute;
+            font-size: 19px;
+            top: 8px;
+            left: 10px;
+        }
+
+        table.table tr th,
+        table.table tr td {
+            border-color: #e9e9e9;
+        }
+
+        table.table-striped tbody tr:nth-of-type(odd) {
+            background-color: #fcfcfc;
+        }
+
+        table.table-striped.table-hover tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        table.table th i {
+            font-size: 13px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        table.table td:last-child {
+            width: 130px;
+        }
+
+        table.table td a {
+            color: #a0a5b1;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        table.table td a.update {
+            color: #ffc107;
+        }
+
+        table.table td a.create {
+            color:  #03a9f4;
+        }
+
+        table.table td a.delete {
+            color: #e34724;
+        }
+
+        table.table td i {
+            font-size: 19px;
+        }
+
+        .pagination {
+            float: right;
+            margin: 0 0 5px;
+        }
+
+        .pagination li a {
+            border: none;
+            font-size: 95%;
+            width: 30px;
+            height: 30px;
+            color: #999;
+            margin: 0 2px;
+            line-height: 30px;
+            border-radius: 30px !important;
+            text-align: center;
+            padding: 0;
+        }
+
+        .pagination li a:hover {
+            color: #666;
+        }
+
+        .pagination li.active a {
+            background: #03a9f4;
+        }
+
+        .pagination li.active a:hover {
+            background: #0397d6;
+        }
+
+        .pagination li.disabled i {
+            color: #ccc;
+        }
+
+        .pagination li i {
+            font-size: 16px;
+            padding-top: 6px;
+        }
+
+        .hint-text {
+            float: left;
+            margin-top: 6px;
+            font-size: 95%;
+        }
+    </style>
+    <script>
+        function filterByStatus() {
+            const selectedStatus = document.getElementById("statusSelect").value;
+            const currentUrl = window.location.href;
+            let newUrl;
+            if (currentUrl.includes("/admin/getBookingOrder?restaurant_id=")) {
+                const baseUrl = currentUrl.split("?")[0]; // Extract base URL
+                const currentParams = new URLSearchParams(currentUrl.split("?")[1]); // Get existing query parameters
+                if (selectedStatus) {
+                    currentParams.set("status", selectedStatus); // Add or update status parameter
+                } else {
+                    currentParams.delete("status"); // Remove status parameter if no selection
+                }
+                newUrl = `${baseUrl}?${currentParams.toString()}`; // Construct new URL
+            } else {
+                newUrl = selectedStatus
+                    ? `/admin/getBookingOrder?status=${selectedStatus}`
+                    : "/admin/getBookingOrder";
+            }
+            window.location.href = newUrl;
+        }
+
+        function filterBookings() {
+            const selectedStatus = document.getElementById("statusSelect").value; // Get the selected status
+            const selectedRestaurantId = document.getElementById("restaurantSelect").value; // Get the selected restaurant ID
+            const queryParams = [];
+            if (selectedStatus) queryParams.push(`status=${selectedStatus}`);
+            if (selectedRestaurantId) queryParams.push(`restaurant_id=${selectedRestaurantId}`);
+            const queryString = queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+            window.location.href = `/admin/getBookingOrder${queryString}`;
+        }
+
+        $(document).ready(function () {
+            $("#createResponseForm").on("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+                const form = $(this);
+                const actionUrl = form.attr("action");
+
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: form.serialize(), // Serialize form data
+                    success: function (response) {
+                        alert("Booking updated successfully!");
+                        location.reload(); // Reload the page
+                    },
+                    error: function (message) {
+                        alert("Failed to update order.");
+                    },
+                });
+            });
+        });
+        $(document).ready(function () {
+            $("#updateResponseForm").on("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+                const form = $(this);
+                const actionUrl = form.attr("action");
+
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: form.serialize(), // Serialize form data
+                    success: function (response) {
+                        alert("Booking updated successfully!");
+                        location.reload(); // Reload the page
+                    },
+                    error: function (message) {
+                        alert("Failed to update order.");
+                    },
+                });
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".create").forEach((button) => {
+
+                button.addEventListener("click", function () {
+                    document.getElementById("c-id").value =
+                        this.getAttribute("data-id");
+                    document.getElementById("c-name").innerText =
+                        this.getAttribute("data-name");
+                    document.getElementById("c-note").innerText =
+                        this.getAttribute("data-note");
+                    document.getElementById("c-guest").innerText =
+                        this.getAttribute("data-guest");
+                    document.getElementById("c-note").innerText =
+                        this.getAttribute("data-note");
+                    document.getElementById(
+                        "e-time"
+                    ).innerText = this.getAttribute("data-time");
+                    document.getElementById(
+                        "bookingID"
+                    ).innerText = this.getAttribute("data-bookingID");
+
+                });
+            });
+        })
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".edit").forEach((button) => {
+                button.addEventListener("click", function () {
+
+                    document.getElementById("e-id").value =
+                        this.getAttribute("data-id");
+                    document.getElementById("e-name").innerText =
+                        this.getAttribute("data-name");
+                    document.getElementById("e-note").innerText =
+                        this.getAttribute("data-note");
+                    document.getElementById("e-guest").innerText =
+                        this.getAttribute("data-guest");
+                    document.getElementById("e-note1").value = this.getAttribute("data-note1");
+                    console.log(this.getAttribute("data-note1"));
+                    document.getElementById("e-status").value =
+                        this.getAttribute("data-status");
+                    document.getElementById("decisionID").innerText=
+                        this.getAttribute("data-decisionID");
+
+                    document.getElementById(
+                        "e-time"
+                    ).innerText = this.getAttribute("data-time");
+                });
+            });
+
+        });
+        $(document).ready(function () {
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]');
+
+            // Set up the modal event handler
+            $("#deleteEmployeeModal").on("show.bs.modal", function (event) {
+                const button = $(event.relatedTarget); // Button that triggered the modal
+                const bookingId = button.data("booking-id"); // Extract booking ID from data attribute
+                console.log("Triggered for booking ID:", bookingId); // Debugging line
+
+                // Set the onclick function dynamically
+                $("#confirmDeleteButton")
+                    .off("click")
+                    .on("click", function () {
+                        deleteBooking(bookingId);
+                    });
+            });
+        });
+
+        // Delete booking function
+        function deleteBooking(bookingId) {
+            console.log("Attempting to delete booking ID:", bookingId); // Debugging line
+
+            fetch(`/user/deleteBooking/${bookingId}`, {method: "DELETE"})
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Delete successful."); // Debugging line
+                        window.location.href = "/user/getUserBooking";
+                    } else {
+                        alert("Failed to delete order.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("An error occurred while deleting order.");
+                });
+        }
+    </script>
+</head>
+<body>
+<div id="createResponseModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form
+                    th:action="@{/admin/decision/create}"
+                    method="POST"
+                    id="createResponseForm"
+            >
+                <div class="modal-header">
+                    <h4 class="modal-title">Create Booking Response #<a id="bookingID"></a></h4>
+                    <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <p class="form-control-static" id="c-name"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Number of guest</label>
+                        <p class="form-control-static" id="c-guest"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Note</label>
+                        <p class="form-control-static" id="c-note"></p>
+                    </div>
+                    <div class="form-group  mb-3">
+                        <label>Time</label>
+                        <p class="form-control-static" id="c-time">abc</p>
+                    </div>
+                    <div class="form-group">
+                        <label >Your note response</label>
+                        <input type="text" name="note" class="form-control" placeholder="Your response">
+                    </div>
+                    <div class="form-group ">
+                        <label >Booking status</label>
+                        <label for="c-status"></label><select name="status" class="form-control" id="c-status">
+                        <option value="" selected disabled hidden>Select a status</option>
+                        <option value="POSTPONED">POSTPONED</option>
+                        <option value="ACCEPTED">ACCEPTED</option>
+                        <option value="DENIED">DENIED</option>
+                    </select>
+                    </div>
+                    <input type="hidden" name="booking_id" id="c-id"/>
+                </div>
+                <div class="modal-footer">
+                    <input
+                            type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal"
+                            value="Cancel"
+                    />
+                    <input type="submit" class="btn btn-info" value="Create"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="updateResponseModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form
+                    th:action="@{/admin/decision/update}"
+                    method="POST"
+                    id="updateResponseForm"
+            >
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit response #<a id="decisionID"></a></h4>
+                    <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <p class="form-control-static" id="e-name"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Number of guest</label>
+                        <p class="form-control-static" id="e-guest"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Note</label>
+                        <p class="form-control-static" id="e-note"></p>
+                    </div>
+                    <div class="form-group  mb-3">
+                        <label>Time</label>
+                        <p class="form-control-static" id="e-time"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Your note response</label>
+                        <input type="text" id="e-note1" name="note" class="form-control" placeholder="Your response" required >
+                    </div>
+                    <div class="form-group ">
+                        <label >Booking status</label>
+                        <label for="e-status"></label><select name="status" class="form-control" id="e-status">
+                        <option value="" selected disabled hidden>Select a status</option>
+                        <option value="POSTPONED">POSTPONED</option>
+                        <option value="ACCEPTED">ACCEPTED</option>
+                        <option value="DENIED">DENIED</option>
+                    </select>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="hidden" name="booking_id" id="e-id"/>
+                    <input
+                            type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal"
+                            value="Cancel"
+                    />
+                    <input type="submit" class="btn btn-info" value="Save"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>
+                            Booking
+                            <b>
+                                <span th:if="${restaurant_id!=null}" th:text="${restaurant.name}"></span>
+                                <span th:if="${restaurant_id==null}">All Restaurants</span>
+
+                            </b>
+                        </h2>
+
+                        <div class="col-sm-10">
+                            <label for="statusSelect">Filter by Status:</label>
+                            <select id="statusSelect" onchange="filterByStatus()" class="form-control">
+                                <option th:value="''" th:selected="${currentStatus == null}">All</option>
+                                <option th:value="'0'" th:selected="${currentStatus == 0}">PENDING</option>
+                                <option th:value="'1'" th:selected="${currentStatus == 1}">POSTPONED</option>
+                                <option th:value="'2'" th:selected="${currentStatus == 2}">ACCEPTED</option>
+                                <option th:value="'3'" th:selected="${currentStatus == 3}">DENIED</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-10">
+                            <label for="restaurantSelect">Filter by Restaurant Name:</label>
+                            <select id="restaurantSelect" onchange="filterBookings()" class="form-control">
+                                <option th:value="''" th:selected="${restaurant_id == null}">All Restaurants</option>
+                                <option th:each="restaurant : ${restaurants}"
+                                        th:value="${restaurant.restaurant_id}"
+                                        th:text="${restaurant.name}"
+                                        th:selected="${restaurant_id == restaurant.restaurant_id}"></option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                <!-- Column -->
+                <tr>
+                    <th th:if="${restaurant_id==null}">Restaurant ID</th>
+                    <th>Booking ID</th>
+                    <th>Customer Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Guests</th>
+                    <th>Time</th>
+                    <th>status</th>
+                    <th>Update at</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Object -->
+                <tr th:each="order : ${orders}">
+                    <th th:if="${restaurant_id==null}" th:text="${order.restaurant_id}"></th>
+                    <td th:text="${order.bookingId}"></td>
+                    <td th:text="${order.customer_name}"></td>
+                    <td th:text="${order.phone}"></td>
+                    <td th:text="${order.email}"></td>
+                    <td th:text="${order.getNumber_of_guests}"></td>
+                    <td th:text="${order.getBooking_date}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td th:text="${order.updated_at}"></td>
+
+                    <td>
+                        <div th:switch="${order.adminDecision}">
+
+                            <div th:case="null">
+                                <a
+                                        href="#createResponseModal"
+                                        class="create"
+                                        data-toggle="modal"
+                                        th:attr="
+                            data-id =${order.bookingId},
+                            data-name=${order.customer_name},
+                            data-guest=${order.getNumber_of_guests},
+                            data-note=${order.getNote},
+                            data-time=${order.booking_date},data-bookingID=${order.bookingId}"
+                                >
+                                    <i
+                                            class="material-icons"
+                                            data-toggle="tooltip"
+                                            title="Edit"
+                                    >&#xE417;</i
+                                    >
+                                </a>
+
+
+
+                            </div>
+                            <div th:case="*"><a
+                                    href="#updateResponseModal"
+                                    class="edit"
+                                    data-toggle="modal"
+                                    th:attr="   data-id =${order.bookingId},
+                            data-name=${order.customer_name},
+                            data-guest=${order.getNumber_of_guests},
+                            data-note=${order.getNote},
+
+                            data-time=${order.booking_date},
+                            data-status=${order.status},
+                            data-note1=${order.adminDecision.getAdminNote},
+                            data-decisionID=${order.adminDecision.getDecisionId}"
+                            >
+                                <i
+                                        class="material-icons"
+                                        data-toggle="tooltip"
+                                        title="Edit"
+                                >&#xE254;</i
+                                >
+                            </a></div>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Object -->
+
+                <!-- Object -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

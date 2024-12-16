@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<!--Form Params-->
+<!--{-->
+<!--"user_id": 4350,(button type hide)-->
+<!--"fullName": "John Doe",-->
+<!--"phoneNumber": "+1234567890",-->
+<!--"address": "123 Main St, Springfield, IL",-->
+<!--"profilePictureUrl": "https://example.com/images/profile.jpg",-->
+<!--"email": "johndoe@example.com"-->
+<!--}-->
+<script>
+    document.getElementById('myForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+            console.log(key, value);
+        });
+
+        try {
+            const response = await fetch('/account/saveUserInformation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type to JSON
+                },
+                body: JSON.stringify(formObject), // Convert object to JSON
+            });
+
+            if (response.ok) {
+                alert('Form submitted successfully!');
+                window.location.href = '/account/login';
+            } else {
+                console.error('Error:', response.statusText);
+                alert('Form submission failed!');
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+            alert('An error occurred!');
+        }
+    });
+</script>
+<body>
+<p th:text="${account_id}"></p>
+</body>
+</html>

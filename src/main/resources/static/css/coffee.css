@@ -1,0 +1,567 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Merriweather", serif;
+}
+
+.card-img {
+    width: 100%;
+    height: 300px; /* Set a fixed height */
+    object-fit: cover; /* Ensure images maintain aspect ratio and fill the area */
+}
+
+/* Common styles */
+.heading {
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.heading span {
+    color: #b2744c;
+}
+
+.card {
+    border-radius: 10px;
+    transition: 0.5s;
+    cursor: pointer;
+    overflow: hidden; /* Prevent content overflow */
+}
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Align content evenly */
+}
+
+.card img {
+    border-radius: 10px;
+}
+
+/* Navbar */
+#navbar {
+    background-color: #b2744c;
+}
+
+#logo img {
+    border-radius: 10px;
+    width: 160px;
+    margin-left: 40px;
+}
+
+.navbar-nav {
+    margin-left: 50px;
+}
+
+.nav-item .nav-link {
+    color: black;
+    margin-left: 10px;
+    font-weight: bold;
+    transition: 0.5s;
+}
+
+.nav-item .nav-link:hover {
+    background: #f7f5f2;
+    border-radius: 5px;
+    color: black;
+}
+
+#navbar form button {
+    background: black;
+    color: white;
+    border: 1px solid white;
+}
+.button{
+    background-color: #b2744c; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s;
+}
+.booking_card {
+    width: 100%; /* Make the card take up 100% of the available width */
+    margin: 10px auto; /* Add margin for spacing */
+    max-width: 600px; /* Increase the max width for horizontal expansion */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    background-color: #b2744c;
+}
+
+/*.form-group.mb-3 {*/
+/*    margin-bottom: 1rem; !* Adjusts spacing between form groups *!*/
+/*    display: flex; !* Enables flexbox for alignment *!*/
+/*    flex-direction: column; !* Stacks label and input vertically *!*/
+/*    align-items: center; !* Centers content horizontally *!*/
+/*    text-align: center; !* Centers text inside each group *!*/
+/*}*/
+
+.booking_card:hover {
+    transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+.booking_card img {
+    width: 35%; /* Set image width to 35% of the card */
+    height: 100%;
+    object-fit: cover;
+    border-right: 1px solid #ddd; /* Add a divider between image and text */
+}
+
+.booking_card-body {
+    padding: 20px;
+    width: 60%;
+    /* Set the text area to take up 60% of the card */
+}
+
+.booking_card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+
+}
+
+.booking_card p {
+    font-size: 1rem;
+}
+
+.button {
+    background-color: #d29b73;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.button:hover {
+    background-color: #9a653d;
+}
+
+/* Home Section */
+#home {
+    width: 100%;
+    height: 90vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(./images/bc3.png);
+    background-size: cover;
+    background-position: 88%;
+}
+
+#home .content {
+    padding-top: 210px;
+    margin-top: 56px;
+    padding-left: 100px;
+}
+
+#home .content h3 {
+    font-size: 50px;
+    color: white;
+    margin-left: 10px;
+}
+
+#home .content p {
+    margin-top: 10px;
+    color: white;
+    margin-left: 10px;
+}
+
+#btn {
+    width: 150px;
+    height: 36px;
+    margin-top: 20px;
+    margin-left: 10px;
+    background: white;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+#btn:hover {
+    background: #b2744c;
+    color: white;
+}
+
+/* About Section */
+#about {
+    width: 100%;
+    padding-top: 70px;
+}
+
+#about .heading{
+    margin-bottom: 60px;
+}
+
+#about .container {
+    padding: 0 20px;
+}
+
+.about-card img {
+    border-radius: 10px;
+}
+
+#about-btn {
+    width: 200px;
+    height: 36px;
+    background: transparent;
+    border: 2px solid #b2744c;
+    color: #b2744c;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+#about-btn:hover {
+    background-color: #b2744c;
+    color: white;
+}
+
+/* Top Categories Section */
+#top-cards {
+    width: 100%;
+    background: #f7f5f2;
+    transition: 0.5s;
+    cursor: pointer;
+    padding: 50px 0; 
+}
+
+#top-cards .heading2 {
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#top-cards .container {
+    margin-top: 30px;
+}
+
+/* Menu Section */
+#menu {
+    width: 100%;
+    margin-top: 60px;
+}
+
+#container2 {
+    margin-top: 50px;
+}
+
+#menu .heading3 {
+    text-align: center;
+    font-size: 30px;
+    color: #b2744c;
+    font-weight: bold;
+    border-bottom: 2px solid #b2744c;
+}
+
+/* Products Section */
+#product {
+    width: 100%;
+}
+
+#container3 {
+    margin-top: 30px;
+}
+
+#product h3 {
+    text-align: center;
+    color: #b2744c;
+    font-size: 23px;
+}
+
+#product .heading4 {
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Gallery Section */
+#gallary {
+    width: 100%;
+    padding: 50px 0; 
+}
+
+#gallary .card:hover {
+    transform: translateY(-10px);
+    transition: 0.3s;
+}
+
+.heading5 {
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#gallary .heading5 span {
+    color: #b2744c;
+}
+
+/* Contact Section */
+#contact {
+    width: 100%;
+    padding-top: 70px;
+    padding-bottom: 50px;
+}
+
+#contact .container {
+    width: 100%;
+    height: 80vh;
+    background: linear-gradient(90deg, white 80%, #b2744c 20%);
+    border-radius: 10px;
+    padding: 0 20px;
+}
+
+.heading6 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 70px;
+}
+
+.heading6 span {
+    color: #b2744c;
+}
+
+#col {
+    width: 100%;
+    height: 56vh;
+    background: black;
+    margin-top: 20px;
+    padding: 20px; 
+}
+
+#contact h1 {
+    color: white;
+    font-size: 25px;
+    margin-top: 10px;
+}
+
+#contact #col p {
+    font-size: 15px;
+    color: white;
+    margin-top: 20px;
+}
+
+/* Blogs Section */
+#blogs {
+    width: 100%;
+    padding: 50px 0; 
+    margin-top: 300px;
+}
+
+#blogs .container {
+    margin-top: 60px;
+}
+
+#blogs span {
+    color: #b2744c;
+}
+.heading7 {
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+/* Footer Section */
+#footer {
+    width: 100%;
+    background: #b2744c;
+    margin-top: 50px;
+    padding: 30px 0; 
+}
+
+.footer-logo img {
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.social-links i {
+    font-size: 17px;
+    margin-left: 10px;
+    margin-top: 30px;
+    padding: 10px;
+    background: black;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.credits {
+    color: white;
+    margin-top: 20px;
+}
+
+.credits a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.credits a span {
+    color: black;
+}
+
+.copyright span {
+    color: black;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.arrow {
+    position: fixed;
+    height: 50px;
+    bottom: 40px;
+    right: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+.card-title {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.booking-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #b2744c;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn {
+    background-color: #b2744c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #9a653d;
+}
+
+form#myForm {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;    /* Center elements horizontally */
+    justify-content: center; /* Center elements vertically */
+    height: 100vh;          /* Use full viewport height */
+    margin: 0 auto;         /* Center form horizontally in its container */
+    text-align: center;
+    background-color: #b2744c;
+    max-width: 500px;
+    /* Center text inside the form */
+}
+
+.form-group.mb-3 {
+    width: 100%;            /* Adjust input fields to match the desired width */
+    max-width: 400px;       /* Limit input field width for a cleaner look */
+    margin-bottom: 1rem;    /* Add spacing between form groups */
+}
+
+form#myForm button {
+    margin-top: 1rem;       /* Add space above the button */
+}
+
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    .navbar-nav {
+        margin-left: 20px;
+    }
+
+    #logo img {
+        width: 120px; 
+        margin-left: 20px; 
+    }
+
+    .nav-item .nav-link {
+        margin-left: 5px; 
+    }
+
+    .heading {
+        font-size: 25px;
+    }
+
+    #btn {
+        width: 120px; 
+        height: 32px;
+        margin-top: 15px;
+    }
+
+    .heading3,
+    #product h3,
+    .heading5,
+    .heading6,
+    #blogs .heading7 {
+        font-size: 20px; 
+        
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .navbar-nav {
+        margin-left: 10px; 
+    }
+
+    #logo img {
+        width: 100px; 
+        margin-left: 10px; 
+    }
+
+    .nav-item .nav-link {
+        margin-left: 3px; 
+    }
+
+    .heading {
+        font-size: 20px;
+    }
+
+    #btn {
+        width: 100px; 
+        height: 28px; 
+        margin-top: 10px; 
+    }
+
+    .heading3,
+    #product h3,
+    .heading5,
+    .heading6,
+    #blogs .heading7 {
+        font-size: 18px;
+    }
+}
+

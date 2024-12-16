@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--{Example
+  "name": "Sample Restaurant",
+  "address": "123 Main St",
+  "district": "1",
+  "picture": "image_url",
+  "open_time": "09:00",
+  "close_time": "22:00",
+  "phone_number": "123-456-7890",
+  "description": "A sample description of the restaurant.",
+  "category": ["bar", "club"]//Option theo id trong category
+}-->
+<script>
+    document.getElementById('myForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+            console.log(key, value);
+        });
+
+        try {
+            const response = await fetch('/admin/createRestaurant', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type to JSON
+                },
+                body: JSON.stringify(formObject), // Convert object to JSON
+            });
+
+            if (response.ok) {
+                alert('Form submitted successfully!');
+                window.location.href = '/account/login';
+            } else {
+                console.error('Error:', response.statusText);
+                alert('Form submission failed!');
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+            alert('An error occurred!');
+        }
+    });
+</script>
+<body>
+
+</body>
+</html>

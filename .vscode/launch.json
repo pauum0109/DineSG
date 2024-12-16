@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "SessionAcoountApplication",
+            "request": "launch",
+            "mainClass": "session.SessionAcoountApplication",
+            "projectName": "Restaurant"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SessionAcoountApplication<SessionAcoount>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "session.sessionacoount.SessionAcoountApplication",
+            "projectName": "SessionAcoount",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SessionAcoountApplication<SessionAcoount>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "session.SessionAcoountApplication",
+            "projectName": "SessionAcoount",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

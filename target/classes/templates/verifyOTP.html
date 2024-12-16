@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+    <style>
+        .form-container {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            background-color: #f9f9f9;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        /* Normal input style */
+        input {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            outline: none;
+        }
+        .input-error {
+            border: 10px solid red;
+        }
+        /* Error input style */
+        /* Error message style */
+        .error-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red;
+            font-size: 12px;
+            margin-bottom: 5px; /* Space between error message and input */
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<form
+        id="form"
+        th:action="@{/verifyOTP/{actionType}/{sessionToken}(sessionToken=${sessionToken}, actionType=${actionType})}"
+        method="post"
+        class="form-container"
+>
+    <input type="hidden" name="actionType" th:value="${actionType}" />
+    <p class="error-text" id="message_error" th:if="${message != null}" th:text="${message}"></p>
+    <p>An OTP code was send to </p>
+    <span th:text="${email}"></span>
+    <div id="otp-container"  >
+        <label for="otp"></label><input
+            type="text"
+            id="otp"
+            name="otp"
+            placeholder="otp"
+            oninput="handleInput(this)"
+            th:class="${message != null} ? 'input-error' : ''"
+    />
+    </div>
+    <div>
+        <button type="submit">Verify</button>
+    </div>
+</form>
+
+<script>
+    function handleInput(input) {
+        input.classList.remove("input-error");
+        const errorText = document.querySelector(".error-text");
+        if (errorText) {
+            errorText.textContent = "";
+        }
+    }
+    //-----------------------------Validate user input, check trống------------------//
+    const errorMessage = document.getElementById('message_error');
+    document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        // Get form inputs
+        const otp = document.getElementById("otp");
+        let isValid = true;
+        if (otp.value.trim() === "") {
+            otp.classList.add("input-error");
+            errorMessage.textContent = "Missing otp";
+            isValid = false;
+        }
+        // If validation passes, submit the form
+        if (isValid) {
+            this.submit();
+        }
+    });
+
+</script>
+</body>
+</html>
