@@ -34,8 +34,7 @@ public class AccountService {
             else {
                 acc.save(account);
                 state.setStatus(Status.SUCCESS);
-            }
-            ;
+            };
             return state;
         } catch (Exception e) {
             throw new Exception(e.getMessage());

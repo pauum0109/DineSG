@@ -1,4 +1,3 @@
-<!--Kiểm soát bang Id-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +21,6 @@
             height: 100vh;
         }
 
-        /* Normal input style */
         input {
             border: 1px solid #ccc;
             padding: 10px;
@@ -30,22 +28,8 @@
             outline: none;
         }
 
-        /* Error input style */
         .input-error {
-            border: 10px solid red;
-        }
-
-        /* Error message style */
-
-
-        .error-text {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: red;
-            font-size: 12px;
-            margin-bottom: 5px; /* Space between error message and input */
-            font-weight: bold;
+            border: 2px solid red;
         }
 
         .error-box {
@@ -53,45 +37,49 @@
             color: white;
             padding: 15px;
             border: 1px solid #cb3b3b;
-            width: fit-content;
             border-radius: 8px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             font-family: Arial, sans-serif;
-            position: relative;
+        }
+
+        .hidden {
+            display: none;
         }
 
         .close-btn {
-            margin-left: 20px;
-            background-color: transparent;
+            background: transparent;
             border: none;
             color: #cb3b3b;
             font-size: 18px;
             cursor: pointer;
-        }
-
-        .close-btn:hover {
-            color: red;
-        }
-
-        .close-btn:focus {
-            outline: none;
-        }
-
-        .error-box.hidden {
-            display: none;
         }
     </style>
 </head>
 
 <body th:data-error-state="${state ?: 'NO_ERROR'}">
 <form id="form" th:action="@{/register}" method="post" class="form-container">
+    <!-- Error Box -->
     <div class="error-box hidden" id="errorBox">
         <p class="error-text" id="message_error"></p>
-        <button class="close-btn" onclick="closeErrorBox()">&times;</button>
+        <button type="button" class="close-btn" onclick="closeErrorBox()">&times;</button>
     </div>
-    <p id="test" th:text="'Email: ' + ${email}" ></p>
 
+    <!-- Email Field -->
+    <div id="email-container">
+        <label for="email">Email:</label>
+        <input
+                th:value="${email ?: ''}"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+        />
+    </div>
+
+    <!-- Username Field -->
     <div id="username-container">
         <label for="username">Username:</label>
         <input
@@ -100,90 +88,99 @@
                 id="username"
                 name="username"
                 placeholder="Username"
-        >
-        <input  th:value="${email ?: ''}" type="hidden" name ="email" >
+        />
     </div>
+
+    <!-- Password Field -->
     <div id="password-container">
         <label for="password">Password:</label>
         <input
-                type="text"
+                type="password"
                 id="password"
                 name="password"
                 placeholder="Password"
-        >
+        />
     </div>
-    <label for="browser">Choose your role:</label>
-    <input list="browsers" id="browser" name="role">
-    <datalist id="browsers">
-        <option value="ADMIN">
-        <option value="USER">
-    </datalist>
+
+    <!-- Role Selection -->
+    <div>
+        <label for="role">Choose your role:</label>
+        <input list="roles" id="role" name="role">
+        <datalist id="roles">
+            <option value="ADMIN">
+            <option value="USER">
+        </datalist>
+    </div>
+
+    <!-- Submit Button -->
     <div>
         <button type="submit">Create</button>
     </div>
 </form>
+
 <script th:inline="javascript">
-
-
-
-    // -------------View base response from server------------------//
+    // Handle server-side error states
     const errorMessage = document.getElementById('message_error');
+    const errorBox = document.getElementById('errorBox');
     const errorState = document.body.getAttribute('data-error-state');
+    const usernameField = document.getElementById('username');
 
-    function handleErrorState(state) {  //Hàm này input vào state view cho từng trạng thái lỗi từ server
-        const errorBox = document.querySelector('.error-box');
-        const name = [[${username}]];
+    function handleErrorState(state) {
         if (state === 'EXIST_USERNAME') {
-            //Thêm class css,data,....
-            errorMessage.textContent = name + ' Exist';
-            document.querySelector('input[name="username"]').classList.add('input-error');
+            errorMessage.textContent = 'Username already exists.';
+            usernameField.classList.add('input-error');
             errorBox.classList.remove('hidden');
+        } else if (state === 'SUCCESS') {
+            alert("Account created successfully!");
+            window.location.href = "/session/Account/login";
         }
-        document.addEventListener("DOMContentLoaded", function () {
-            if (state === 'SUCCESS') {
-                alert("Create success"); // Show the success alert
-                // After the alert, redirect to the index page
-                window.location.href = "../../java/session/Account/login";
-            }
-        });
     }
-    // Call the function with the current state
-    handleErrorState(errorState);
-    //-----------------------------Validate account input, check trống------------------//
+
+    document.addEventListener("DOMContentLoaded", function () {
+        handleErrorState(errorState);
+    });
+
+    // Client-side form validation
     document.getElementById('form').addEventListener('submit', function (e) {
         e.preventDefault();
-        // Get form inputs
-        const errorMessage = document.getElementById('message_error');
-        let isValid = true;
         const username = document.getElementById('username');
         const password = document.getElementById('password');
-        const errorBox = document.querySelector('.error-box');
-        username.classList.remove('input-error');
-        password.classList.remove('input-error');
+        const email = document.getElementById('email');
+
+        let isValid = true;
+
+        // Reset errors
+        [username, password, email].forEach(input => input.classList.remove('input-error'));
         errorMessage.textContent = '';
-        errorBox.classList.add('hidden'); // Hide the error box initially
-        if (username.value.trim() === '') {
+        errorBox.classList.add('hidden');
+
+        // Validate fields
+        if (email.value.trim() === '') {
+            email.classList.add('input-error');
+            errorMessage.textContent = 'Email is required';
+            errorBox.classList.remove('hidden');
+            isValid = false;
+        } else if (username.value.trim() === '') {
             username.classList.add('input-error');
-            errorMessage.textContent = 'Missing username';
+            errorMessage.textContent = 'Username is required';
             errorBox.classList.remove('hidden');
             isValid = false;
         } else if (password.value.trim() === '') {
-            // document.getElementById('emailError').textContent = 'Password is required.';
             password.classList.add('input-error');
-            errorMessage.textContent = 'Missing password';
+            errorMessage.textContent = 'Password is required';
             errorBox.classList.remove('hidden');
             isValid = false;
         }
-        // If validation passes, submit the form
+
+        // Submit if valid
         if (isValid) {
             errorBox.classList.add('hidden');
             this.submit();
         }
     });
+
     function closeErrorBox() {
-        const username = document.getElementById('username');
-        const password = document.getElementById('password');
-        document.getElementById("errorBox").style.display = "none";
+        errorBox.classList.add('hidden');
     }
 </script>
 </body>

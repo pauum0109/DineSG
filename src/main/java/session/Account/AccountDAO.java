@@ -1,5 +1,4 @@
 package session.Account;
-//https://www.youtube.com/watch?v=0uLqdBpYAVA
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -29,26 +28,31 @@ public class AccountDAO implements DAO<Account, Integer> {
     }
     @Override
     public Optional<Account> findById(Integer id) {
-        return Optional.empty();
+        String query = "SELECT * FROM user WHERE user_id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(query, new Account(), id));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
     @Override
     public Optional<List<Account>> findAll() {
-        String query = "select * FROM view_account";
+        String query = "SELECT * FROM user";
         return Optional.of(jdbcTemplate.query(query, new Account()));
     }
     @Override
     public void save(Account entity) {
-        String query = "INSERT INTO User (user_id, username, user_password, user_email,user_role) VALUES (?, ?, ?, ?,?)";
+        String query = "INSERT INTO `user` (user_id, username, user_password, user_email, user_role, created_at) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
         jdbcTemplate.update(query, entity.getUser_id(), entity.getUsername(), entity.getPassword(), entity.getEmail(), entity.getRole());
     }
     @Override
     public void update(Account entity) {
-        String query = "UPDATE User SET username = ?, user_email = ?, user_password = ? WHERE user_id = ?";
+        String query = "UPDATE user SET username = ?, user_email = ?, user_password = ? WHERE user_id = ?";
         jdbcTemplate.update(query, entity.getUsername(), entity.getEmail(), entity.getPassword(), entity.getUser_id());
     }
     @Override
     public void delete(Integer entity) {
-        String query = "DELETE FROM User WHERE user_id = ?";
+        String query = "DELETE FROM user WHERE user_id = ?";
         jdbcTemplate.update(query, entity);
     }
     public Optional<Account> getByEmail(String email) {

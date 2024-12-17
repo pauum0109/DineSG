@@ -1,7 +1,6 @@
 package session.Account;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.User;
 import org.springframework.boot.jackson.JsonMixinModuleEntries;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,7 @@ public class AccountController {
         if (session.getAttribute("user") != null&&!model.containsAttribute("state")) {
             return "redirect:/index";
         }
-        return "form";
+        return "login";
     }
     @GetMapping("/verifyEmail")
     public String recover() {
