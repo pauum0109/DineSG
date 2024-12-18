@@ -85,12 +85,12 @@
 </head>
 
 <body th:data-error-state="${state ?: 'NO_ERROR'}">
-<form id="form" th:action="@{/account/register}" method="post" class="form-container">
+<form id="form" th:action="@{/account/login}" method="post" class="form-container">
     <div class="error-box hidden" id="errorBox">
         <p class="error-text" id="message_error"></p>
         <button class="close-btn" onclick="closeErrorBox()">&times;</button>
     </div>
-    <p id="test" th:text="'Email: ' + ${email}" ></p>
+    <p id="test" th:value="${username}"></p>
 
     <div id="username-container">
         <label for="username">Username:</label>
@@ -100,8 +100,8 @@
                 id="username"
                 name="username"
                 placeholder="Username"
+
         >
-        <input  th:value="${email ?: ''}" type="hidden" name ="email" >
     </div>
     <div id="password-container">
         <label for="password">Password:</label>
@@ -110,19 +110,15 @@
                 id="password"
                 name="password"
                 placeholder="Password"
+
         >
     </div>
-<!--    <label for="browser">Choose your role:</label>-->
-<!--    <input list="browsers" id="browser" name="role">-->
-<!--    <datalist id="browsers">-->
-<!--        <option value="ADMIN">-->
-<!--        <option value="USER">-->
-<!--    </datalist>-->
     <div>
-        <button type="submit">Create</button>
+        <button type="submit">Login</button>
     </div>
 </form>
 <script th:inline="javascript">
+
 
 
 
@@ -132,24 +128,26 @@
 
     function handleErrorState(state) {  //Hàm này input vào state view cho từng trạng thái lỗi từ server
         const errorBox = document.querySelector('.error-box');
-        const name = [[${username}]];
-        if (state === 'EXIST_USERNAME') {
+
+        if (state === 'ERROR') {
             //Thêm class css,data,....
-            errorMessage.textContent = name + ' Exist';
+            errorMessage.textContent = "Wrong username or password";
             document.querySelector('input[name="username"]').classList.add('input-error');
+            document.querySelector('input[name="password"]').classList.add('input-error');
             errorBox.classList.remove('hidden');
         }
         document.addEventListener("DOMContentLoaded", function () {
             if (state === 'SUCCESS') {
-                alert("Create success"); // Show the success alert
+                alert("login success"); // Show the success alert
                 // After the alert, redirect to the index page
-                window.location.href = "../../java/session/Account/login";
+                window.location.href = "/index";
             }
         });
     }
+
     // Call the function with the current state
     handleErrorState(errorState);
-    //-----------------------------Validate account input, check trống------------------//
+    //-----------------------------Validate user input, check trống------------------//
     document.getElementById('form').addEventListener('submit', function (e) {
         e.preventDefault();
         // Get form inputs
@@ -183,6 +181,8 @@
     function closeErrorBox() {
         const username = document.getElementById('username');
         const password = document.getElementById('password');
+        username.classList.remove('input-error');
+        password.classList.remove('input-error');
         document.getElementById("errorBox").style.display = "none";
     }
 </script>

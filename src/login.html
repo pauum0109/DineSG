@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-box">
+        <div class="form-container" id="login-form">
+            <div class="login-header">
+                <header>Login</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" autocomplete="off" required>
+            </div>
+            <div class="forgot">
+                <section>
+                    <input type="checkbox" id="check">
+                    <label for="check">Remember me</label>
+                </section>
+                <section>
+                    <a href="#" onclick="showForgotPassword()">Forgot password</a>
+                </section>
+            </div>
+            <div class="input-submit">
+                <button class="submit-btn" id="login-btn">Sign In</button>
+            </div>
+            <div class="sign-up-link">
+                <p>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></p>
+            </div>
+        </div>
+
+        <div class="form-container" id="register-form" style="display: none;">
+            <div class="login-header">
+                <header>Register</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Full Name" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <input type="email" class="input-field" placeholder="Email" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Confirm Password" autocomplete="off" required>
+            </div>
+            <div class="input-submit">
+                <button class="submit-btn" id="register-btn">Register</button>
+            </div>
+            <div class="sign-up-link">
+                <p>Already have an account? <a href="#" onclick="showLogin()">Sign In</a></p>
+            </div>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div class="form-container" id="forgot-password-form" style="display: none;">
+            <div class="login-header">
+                <header>Forgot Password</header>
+            </div>
+            <div class="input-box">
+                <input type="email" class="input-field" placeholder="Enter your email" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Enter the code sent to your email" autocomplete="off" required>
+            </div>
+            <div class="input-submit">
+                <button class="submit-btn" id="reset-btn">Submit</button>
+            </div>
+            <div class="sign-up-link">
+                <p>Remembered your password? <a href="#" onclick="showLogin()">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showRegister() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('forgot-password-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('forgot-password-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        function showForgotPassword() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('forgot-password-form').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

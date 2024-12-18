@@ -81,8 +81,6 @@ public class RestaurantService {
             categoryDAO.insertCategory(restaurantId, categoryId);
         }
     }
-    //This function add Category for the restaurant
-
     @Transactional
     public void createRestaurant(RestaurantDTO restaurant, int owner_id) {
         restaurantDAO.insertRestaurant(owner_id, restaurant.getRestaurant_id(), restaurant.getName(), restaurant.getDistrict(), restaurant.getAddress(), restaurant.getDescription(), restaurant.getPicture(), restaurant.getPhone_number(), restaurant.getOpen_time(),

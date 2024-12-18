@@ -32,7 +32,7 @@ public class OTPAPI {
         try {
             if (accountService.isEmailExist(email)) {
                 redirectAttributes.addFlashAttribute("state", "error");//Set state
-                return "redirect:/verifyEmail";
+                return "redirect:/account/verifyEmail";
             }
             //generate session token
             String token = generateSessionToken.get();
@@ -86,7 +86,7 @@ public class OTPAPI {
                     session.setAttribute("isVerify", true);
                     if ("register".equalsIgnoreCase(actionType)) {
                         redirectAttributes.addFlashAttribute("email", s.getData());
-                        return "redirect:/register";
+                        return "redirect:/account/register";
                     } else if ("recover".equalsIgnoreCase(actionType)) {
                         return "redirect:/resetPassword/" + token;
                     }

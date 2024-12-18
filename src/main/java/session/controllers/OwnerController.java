@@ -1,4 +1,4 @@
-package session.Booking.Controller;
+package session.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -27,11 +27,11 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminRestController {
+public class OwnerController {
     private final BookingService bookingService;
     private final RestaurantService restaurantService;
     private final EmailService emailService;
-    public AdminRestController(BookingService bookingService, RestaurantService restaurantService, EmailService emailService) {
+    public OwnerController(BookingService bookingService, RestaurantService restaurantService, EmailService emailService) {
         this.bookingService = bookingService;
         this.restaurantService = restaurantService;
         this.emailService = emailService;
