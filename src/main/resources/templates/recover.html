@@ -4,115 +4,252 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Document</title>
+    <title>Password Recovery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        .form-container {
-            border: 2px solid #ccc;
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            background-color: #f9f9f9;
-        }
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+
         body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #fff;
+            background-color: #b2744c;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-        /* Normal input style */
-        input {
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 4px;
-            outline: none;
+
+        .card-3d-wrap {
+            position: relative;
+            width: 440px;
+            max-width: 100%;
+            height: 450px;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            perspective: 800px;
+            margin-top: 40px;
         }
-        /* Error input style */
-        /* Error message style */
-        .error-text {
+
+        .card-3d-wrapper {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            transition: all 600ms ease-out;
+        }
+
+        .card-front {
+            width: 100%;
+            height: 100%;
+            background-color: #2a2b38;
+            position: absolute;
+            border-radius: 10px;
+            left: 0;
+            top: 0;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: red;
-            font-size: 12px;
-            margin-bottom: 5px; /* Space between error message and input */
+            padding: 30px;
+        }
+
+        .form-heading {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .form-container {
+            width: 100%;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-style {
+            padding: 13px 20px;
+            padding-left: 55px;
+            height: 48px;
+            width: 100%;
+            font-weight: 500;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: 0.5px;
+            outline: none;
+            color: #c4c3ca;
+            background-color: #1f2029;
+            border: none;
+            transition: all 200ms linear;
+            box-shadow: 0 4px 8px 0 rgba(21, 21, 21, .2);
+        }
+
+        .form-style:focus {
+            outline: none;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 0;
+            left: 18px;
+            height: 48px;
+            font-size: 24px;
+            color: #b2744c;
+            line-height: 48px;
+        }
+
+        .btn {
+            border-radius: 4px;
+            height: 48px;
+            width: 100%;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 200ms linear;
+            padding: 0 30px;
+            letter-spacing: 1px;
+            text-align: center;
+            border: none;
+            background-color: #b2744c;
+            color: #fff;
+            box-shadow: 0 8px 24px 0 rgba(18, 248, 173, .2);
+        }
+
+        .btn:hover {
+            background-color: #fff;
+            color: #b2744c;
+        }
+
+        .error-box {
+            position: relative;
+            background-color: #2c1b1b;
+            color: white;
+            padding: 15px;
+            border: 1px solid #cb3b3b;
+            border-radius: 8px;
+            display: none;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .error-box p {
+            margin: 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 16px;
             font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #cb3b3b;
+        }
+
+        .input-error {
+            border: 2px solid #cb3b3b !important;
         }
     </style>
 </head>
 
 <body th:data-error-state="${state ?: 'NO_ERROR'}">
-<form
-        id="form"
-        th:action="@{/recover}"
-        method="post"
-        class="form-container"
->
+<div class="card-3d-wrap">
+    <div class="card-3d-wrapper">
+        <div class="card-front">
+            <div class="form-heading">Recover Password</div>
+            <form id="form" th:action="@{/recover}" method="post" class="form-container">
+                <div class="error-box" id="errorBox">
+                    <button class="close-btn" type="button" onclick="closeErrorBox()">&times;</button>
+                    <p class="error-text" id="message_error"></p>
+                </div>
 
-    <p class="error-text" id="message_error"></p>
-    <p>Enter email:</p>
-    <div id="email-container">
-        <label for="email"></label><input
-            type="text"
-            id="email"
-            name="email"
-            placeholder="Email"
-            onblur="handleInputBlur(this)"
-            oninput="handleInput(this)"
-    />
+                <div class="form-group">
+                    <i class="input-icon fa fa-envelope"></i>
+                    <input type="text" id="email" name="email" class="form-style" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Find</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
-        <button type="submit">Find</button>
-    </div>
-</form>
-<script th:inline="javascript">
-    function handleInput(input) {
-        input.classList.remove("input-error");
-        const errorText = document.querySelector(".error-text");
-        if (errorText) {
-            errorText.textContent = "";
-        }
-    }
-    // -------------View base response from server------------------//
-    const errorMessage = document.getElementById("message_error");
-    const errorState = document.body.getAttribute("data-error-state");
+</div>
+
+<script>
+    const errorState = document.body.getAttribute('data-error-state');
+    const errorBox = document.getElementById('errorBox');
+    const errorMessage = document.getElementById('message_error');
+
     function handleErrorState(state) {
-        //Hàm này input vào state view cho từng trạng thái lỗi từ server
-        if (state === "NOT_FOUND") {
-            //Thêm class css,data,....
-            alert("Email not found");
+        if (state === 'NOT_FOUND') {
             errorMessage.textContent = "Email not found";
-            document.querySelector('input[name="email"]')
-                .classList.add("input-error");
+            document.getElementById('email').classList.add('input-error');
+            errorBox.style.display = 'block';
+        }
+    }
+
+    handleErrorState(errorState);
+
+    document.getElementById('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email');
+        let isValid = true;
+
+        errorBox.style.display = 'none';
+        errorMessage.textContent = '';
+        email.classList.remove('input-error');
+
+        if (email.value.trim() === '') {
+            email.classList.add('input-error');
+            errorMessage.textContent = 'Missing email';
+            errorBox.style.display = 'block';
+            isValid = false;
+        } else if (validateEmail(email.value) === false) {
+            email.classList.add('input-error');
+            errorMessage.textContent = 'Invalid Email';
+            errorBox.style.display = 'block';
+            isValid = false;
         }
 
-    }
-    // Call the function with the current state
-    handleErrorState(errorState);
-    //-----------------------------Validate user input, check trống------------------//
-    document.getElementById("form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        // Get form inputs
-        const email = document.getElementById("email");
-        let isValid = true;
-        if (email.value.trim() === "") {
-            email.classList.add("input-error");
-            errorMessage.textContent = "Missing email";
-            isValid = false;
-        }
-        if (validateEmail(email.value) === false) {
-            email.classList.add("input-error");
-            errorMessage.textContent = "Invalid Email";
-            isValid = false;
-        }
-        // If validation recover.htmles, submit the form
         if (isValid) {
             this.submit();
         }
     });
-    // Email validation function
+
     function validateEmail(email) {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(email);
+    }
+
+    function closeErrorBox() {
+        errorBox.style.display = 'none';
+        document.getElementById('email').classList.remove('input-error');
     }
 </script>
 </body>
