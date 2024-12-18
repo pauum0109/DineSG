@@ -6,6 +6,31 @@
     <title>Home</title>
     <link rel="stylesheet" href="/css/coffee.css"/>
     <style>
+        #home {
+            background-image: url('https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg'); /* Replace with your image path */
+            background-size: cover; /* Makes the background cover the entire section */
+            background-position: center; /* Centers the background image */
+            background-repeat: no-repeat; /* Prevents background repetition */
+            display: flex;
+            align-items: flex-start; /* Vertically centers the content */
+            justify-content: left; /* Horizontally centers the content */
+            color: white; /* Ensures text is readable */
+        }
+
+        .content {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #shop-now-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #ff5733; /* Custom button color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
         h2 {
             font-family: 'Satoshi', sans-serif;
         }
@@ -167,7 +192,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" th:href="@{/account/login}">Login as user</a></li>
                             <li><hr class="dropdown-divider"/></li>
-                            <li><a class="dropdown-item" th:href="@{/account/register}">Register user</a></li>
+                            <li><a class="dropdown-item" href="#">Register user</a></li>
                             <li><a class="dropdown-item" href="#">Register restaurant</a></li>
                         </ul>
                     </li>
@@ -180,7 +205,7 @@
         </div>
     </nav>
     <section id="home">
-        <div class="content m-0">
+        <div class="content">
             <h3>
                 Booking the restaurant <br/>
                 you want
@@ -234,9 +259,9 @@
     <section id="top-cards">
         <div class="heading2">Top <span>Categories</span></div>
 
-        <div style="padding: 20px; text-align: right;">
+        <div style="padding: 20px; text-align: right; display: inline-block;">
             <label for="districtSelect" style="margin-right: 10px;">Filter by Restaurant Name:</label>
-            <select id="districtSelect" onchange="filterBookings()" class="form-control">
+            <select id="districtSelect" onchange="filterBookings()" class="form-control" style="width: auto; display: inline-block;">
                 <option th:value="''" th:selected="${district == null}">All District</option>
                 <option th:each="d : ${districtList}"
                         th:value="${d.id}"
@@ -244,6 +269,7 @@
                         th:selected="${district == d.id}"></option>
             </select>
         </div>
+
         <div class="container">
             <div class="row mb-4">
                 <div class="col-md-4 py-3 py-md-0">
@@ -439,12 +465,11 @@
                     <div class="card">
                         <img src="./images/b1.png" alt=""/>
                         <div class="card-body">
-                            <h3>Lorem, ipsum dolor.</h3>
-                            <h5>Admin / 6 March 2020</h5>
+                            <h3>Restaurant</h3>
+                            <h5>Admin / 10 December 2024</h5>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Voluptas assumenda quidem itaque maiores provident odit illo
-                                mollitia atque reprehenderit ad?
+                               Give you all my service
+
                             </p>
                             <button id="read-more-blog1-btn">Read More.</button>
                         </div>
@@ -454,12 +479,10 @@
                     <div class="card">
                         <img src="./images/b2.png" alt=""/>
                         <div class="card-body">
-                            <h3>Lorem, ipsum dolor.</h3>
-                            <h5>Admin / 6 March 2020</h5>
+                            <h3>Management</h3>
+                            <h5>Admin / 2 December 2024</h5>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Voluptas assumenda quidem itaque maiores provident odit illo
-                                mollitia atque reprehenderit ad?
+                              Manage your restaurant slot , fill up the place
                             </p>
                             <button id="read-more-blog2-btn">Read More.</button>
                         </div>
@@ -469,12 +492,10 @@
                     <div class="card">
                         <img src="./images/b3.png" alt=""/>
                         <div class="card-body">
-                            <h3>Lorem, ipsum dolor.</h3>
-                            <h5>Admin / 6 March 2020</h5>
+                            <h3>Blog</h3>
+                            <h5>Admin / 10 November 2024</h5>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Voluptas assumenda quidem itaque maiores provident odit illo
-                                mollitia atque reprehenderit ad?
+                              Design your own description for advertising
                             </p>
                             <button id="read-more-blog3-btn">Read More.</button>
                         </div>

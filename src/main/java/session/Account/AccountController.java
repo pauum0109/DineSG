@@ -24,8 +24,11 @@ public class AccountController {
         this.userInformationRepo = userInformationRepo;
     }
     @GetMapping("/getUserInformation")
-    public ResponseEntity<UserInformation> getUserInformation(HttpSession session,@RequestParam int id) {
-        return ResponseEntity.ok(userInformationRepo.getUserInformation(id));
+    public String getUserInformation(HttpSession session,@RequestParam int id,Model model) {
+        Integer user = (Integer) session.getAttribute("user");
+        UserInformation userInformation = userInformationRepo.getUserInformation(user);
+        model.addAttribute("userInformation",userInformation);
+        return "updateInformation" ;
     }
     @GetMapping("/login")
     public String login(HttpSession session, Model model, HttpServletResponse response) {
@@ -36,7 +39,7 @@ public class AccountController {
         if (session.getAttribute("user") != null&&!model.containsAttribute("state")) {
             return "redirect:/index";
         }
-        return "form";
+        return "login";
     }
     @GetMapping("/verifyEmail")
     public String recover() {
@@ -68,14 +71,14 @@ public class AccountController {
     @GetMapping("/createUserInformation/{id}")
     public String createUserInformation(HttpSession session, @PathVariable String id,Model model){
         model.addAttribute("account_id",id);
-        return "information";
+        return "createInformation";
     }
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.removeAttribute("user");
         return "redirect:/index";
     }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/login")
     public String loginTest(HttpSession session, @RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
         State<UserDTO> res = accountService.login(username, password);//Server check
@@ -100,6 +103,7 @@ public class AccountController {
             return "redirect:/account/register";
         }
         redirectAttributes.addFlashAttribute("state", res.getStatus().toString());
+        redirectAttributes.addFlashAttribute("email", email);
         return "redirect:/account/createUserInformation/"+res.getData().id();
     }
     @PutMapping("/changePassword")

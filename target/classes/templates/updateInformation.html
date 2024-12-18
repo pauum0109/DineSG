@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <style>
+        /* Ensure the body covers the entire viewport */
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: black; /* Set label color to black */
+        }
+        .text  {
+            font-size: 14px;
+            color: black; /* Set label color to black */
+        }
+
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        /* Card styling with background image */
+        .card {
+            width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-image: url('https://example.com/images/background.jpg'); /* Background image URL */
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: none;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"] {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Centered card with the form -->
+<div class="card">
+    <form id="myForm">
+        <label for="email">Email:</label>
+        <input type="tel" id="email" name="email" required th:value="${userInformation.email}"><br><br>
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" th:value="${userInformation.fullName}"  required><br><br>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber"  required th:value="${userInformation.phoneNumber}"><br><br>
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" th:value="${userInformation.address}"  required><br><br>
+        <label for="profilePictureUrl">Profile Picture URL:</label>
+        <input type="url" id="profilePictureUrl" name="profilePictureUrl" th:value="${userInformation.profilePictureUrl}" required><br><br>
+        <button type="submit">Create</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('myForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
+        try {
+            const response = await fetch('/account/updateUserInformation', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type to JSON
+                },
+                body: JSON.stringify(formObject), // Convert object to JSON
+            });
+
+            if (response.ok) {
+                alert('Update successfully!');
+                window.reload();
+            } else {
+                console.error('Error:', response.statusText);
+                alert('Form submission failed!');
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+            alert('An error occurred!');
+        }
+    });
+</script>
+</body>
+</html>
