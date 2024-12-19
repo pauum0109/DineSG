@@ -3,16 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
+    <style>
+        /* Ensure the body covers the entire viewport */
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: black; /* Set label color to black */
+        }
+
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        /* Card styling with background image */
+        .card {
+            width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-image: url('https://example.com/images/background.jpg'); /* Background image URL */
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: none;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"] {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
-<!--Form Params-->
-<!--{-->
-<!--"user_id": 4350,(button type hide)-->
-<!--"fullName": "John Doe",-->
-<!--"phoneNumber": "+1234567890",-->
-<!--"address": "123 Main St, Springfield, IL",-->
-<!--"profilePictureUrl": "https://example.com/images/profile.jpg",-->
-<!--"email": "johndoe@example.com"-->
-<!--}-->
+<body>
+
+<!-- Centered card with the form -->
+<div class="card">
+    <form id="myForm">
+        <input type="hidden" name="user_id" value="4350"> <!-- Hidden user ID -->
+
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" value="John Doe" required><br><br>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" value="+1234567890" required><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" value="123 Main St, Springfield, IL" required><br><br>
+
+        <label for="profilePictureUrl">Profile Picture URL:</label>
+        <input type="url" id="profilePictureUrl" name="profilePictureUrl" value="https://example.com/images/profile.jpg" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="johndoe@example.com" required><br><br>
+
+        <button type="submit">Update</button>
+    </form>
+</div>
+
 <script>
     document.getElementById('myForm').addEventListener('submit', async function (event) {
         event.preventDefault();
@@ -46,7 +136,5 @@
         }
     });
 </script>
-<body>
-<p th:text="${account_id}"></p>
 </body>
 </html>

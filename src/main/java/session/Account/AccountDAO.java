@@ -68,6 +68,14 @@ public class AccountDAO implements DAO<Account, Integer> {
             return Optional.empty();
         }
     }
+    public Optional<String> getUsernameByUserId(int userId) {
+        String query = "SELECT username FROM User WHERE user_id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(query, String.class, userId));
+        } catch (Exception e) {
+            return Optional.empty(); // Handle cases where the user_id is not found
+        }
+    }
     public void updatePassword(int user_id, String password) {
         String query = "UPDATE user SET user_password = ? WHERE user_id = ?";
         jdbcTemplate.update(query, password, user_id);

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 15px;
+      max-width: 500px; /* Reduced overall width */
+      width: 100%;
+      margin: 0 auto;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      border: 1px solid #e0a24c;
+    }
+    .info h1 {
+      font-size: 28px; /* Reduced font size */
+      font-family: 'Playfair Display', serif;
+      color: #b2744c;
+      margin-bottom: 10px;
+    }
+    .info img {
+      width: 60px; /* Scaled down image */
+      height: 60px;
+      margin-bottom: 5px;
+    }
+    .form {
+      width: 100%;
+    }
+    .form input, .form textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px; /* Reduced padding */
+      border: 1px solid #cda45e;
+      background: #ffffff;
+      color: #000000;
+      font-size: 12px; /* Smaller font size */
+      border-radius: 5px;
+    }
+    .form textarea {
+      resize: none;
+    }
+    .error {
+      color: red;
+      font-size: 10px; /* Smaller error message */
+      margin-bottom: 5px;
+      text-align: left;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+    }
+    .button {
+      background: transparent;
+      border: 1px solid #e0a24c; /* Slightly thinner border */
+      color: #b2744c;
+      padding: 5px 12px; /* Compact button size */
+      border-radius: 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .button:hover {
+      background-color: #e0a24c;
+      color: black;
+    }
+    @media (max-width: 768px) {
+      body {
+        height: auto;
+        padding: 10px;
+      }
+      .container {
+        padding: 10px;
+      }
+      .info h1 {
+        font-size: 24px; /* Smaller on mobile */
+      }
+      .form input, .form textarea {
+        font-size: 10px; /* Smaller font for mobile */
+      }
+      .button {
+        font-size: 10px;
+        padding: 4px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Contact Information -->
+  <div class="info">
+    <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/external-contact-contact-us-icons-flaticons-lineal-color-flat-icons.png" alt="Contact Icon"/>
+    <h1>Contact Us</h1>
+  </div>
+
+  <!-- Contact Form -->
+  <div class="form">
+    <form id="contactForm" novalidate>
+      <input type="text" id="name" placeholder="Your Name" required pattern="[A-Za-z\s]+" title="Name must contain only letters and spaces.">
+      <div class="error" id="nameError"></div>
+
+      <input type="email" id="email" placeholder="Your Email" required>
+      <div class="error" id="emailError"></div>
+
+      <input type="text" id="subject" placeholder="Subject" required>
+      <div class="error" id="subjectError"></div>
+
+      <textarea id="message" rows="4" placeholder="Message" required></textarea>
+      <div class="error" id="messageError"></div>
+
+      <div class="buttons">
+        <button type="submit" class="button">Send Message</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--<script>-->
+<!--  document.getElementById('contactForm').addEventListener('submit', function (e) {-->
+<!--    e.preventDefault();-->
+
+<!--    let valid = true;-->
+
+<!--    // Name validation-->
+<!--    const name = document.getElementById('name');-->
+<!--    const nameError = document.getElementById('nameError');-->
+<!--    if (!name.value.match(/^[A-Za-z\s]+$/)) {-->
+<!--      nameError.textContent = 'Name must contain only letters and spaces.';-->
+<!--      valid = false;-->
+<!--    } else {-->
+<!--      nameError.textContent = '';-->
+<!--    }-->
+
+<!--    // Email validation-->
+<!--    const email = document.getElementById('email');-->
+<!--    const emailError = document.getElementById('emailError');-->
+<!--    if (!email.value.match(/^\S+@\S+\.\S+$/)) {-->
+<!--      emailError.textContent = 'Please enter a valid email address.';-->
+<!--      valid = false;-->
+<!--    } else {-->
+<!--      emailError.textContent = '';-->
+<!--    }-->
+
+<!--    // Subject validation-->
+<!--    const subject = document.getElementById('subject');-->
+<!--    const subjectError = document.getElementById('subjectError');-->
+<!--    if (subject.value.trim() === '') {-->
+<!--      subjectError.textContent = 'Subject is required.';-->
+<!--      valid = false;-->
+<!--    } else {-->
+<!--      subjectError.textContent = '';-->
+<!--    }-->
+
+<!--    // Message validation-->
+<!--    const message = document.getElementById('message');-->
+<!--    const messageError = document.getElementById('messageError');-->
+<!--    if (message.value.trim() === '') {-->
+<!--      messageError.textContent = 'Message cannot be empty.';-->
+<!--      valid = false;-->
+<!--    } else {-->
+<!--      messageError.textContent = '';-->
+<!--    }-->
+
+<!--    // If all validations pass-->
+<!--    if (valid) {-->
+<!--      alert('Message sent successfully!');-->
+<!--      document.getElementById('contactForm').reset();-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+</body>
+</html>

@@ -110,7 +110,7 @@ public class RestaurantDAO {
                     "    restaurant_description = ?\n" +
                     "WHERE\n" +
                     "    restaurant_id = ?;";
-             jdbcTemplate.update(query, name, district, address, picture, phoneNumber, openTime, closeTime, description, restaurantId);
+            jdbcTemplate.update(query, name, district, address, picture, phoneNumber, openTime, closeTime, description, restaurantId);
         } catch (Exception e) {
             return ;
         }

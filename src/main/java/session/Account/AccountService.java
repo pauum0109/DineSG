@@ -43,6 +43,9 @@ public class AccountService {
 
     }
 
+    public String getUsernameByUserId(int userId) {
+        return acc.getUsernameByUserId(userId).orElse(null); // Return the username or null if not found
+    }
 
     public State<UserDTO> login(String user_name, String password) {
         State<UserDTO> state = new State<UserDTO>();

@@ -39,19 +39,10 @@
     border-radius: 10px;
 }
 
-/* Navbar */
-#navbar {
-    background-color: #b2744c;
-}
-
 #logo img {
     border-radius: 10px;
     width: 160px;
     margin-left: 40px;
-}
-
-.navbar-nav {
-    margin-left: 50px;
 }
 
 .nav-item .nav-link {
@@ -72,9 +63,9 @@
     color: white;
     border: 1px solid white;
 }
-.button{
+/* .button{
     background-color: #b2744c; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s;
-}
+} */
 .booking_card {
     width: 100%; /* Make the card take up 100% of the available width */
     margin: 10px auto; /* Add margin for spacing */
@@ -88,14 +79,6 @@
     flex-direction: row;
     background-color: #b2744c;
 }
-
-/*.form-group.mb-3 {*/
-/*    margin-bottom: 1rem; !* Adjusts spacing between form groups *!*/
-/*    display: flex; !* Enables flexbox for alignment *!*/
-/*    flex-direction: column; !* Stacks label and input vertically *!*/
-/*    align-items: center; !* Centers content horizontally *!*/
-/*    text-align: center; !* Centers text inside each group *!*/
-/*}*/
 
 .booking_card:hover {
     transform: scale(1.05); /* Slightly enlarge the card on hover */
@@ -124,7 +107,7 @@
     font-size: 1rem;
 }
 
-.button {
+/* .button {
     background-color: #d29b73;
     color: white;
     border: none;
@@ -139,20 +122,22 @@
 
 .button:hover {
     background-color: #9a653d;
-}
+} */
 
-/* Home Section */
+/* Manage home */
 #home {
-    width: 100%;
-    height: 90vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(./images/bc3.png);
+    background-image: url('https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg'); /* Replace with your image path */
     background-size: cover;
-    background-position: 88%;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center; /* Vertically centers the content */
+    justify-content: left; /* Horizontally aligns content */
+    height: 100vh; /* Full viewport height */
+    color: white; /* Default text color */
 }
 
 #home .content {
-    padding-top: 210px;
-    margin-top: 56px;
     padding-left: 100px;
 }
 
@@ -160,15 +145,100 @@
     font-size: 50px;
     color: white;
     margin-left: 10px;
+    font-family: 'Playfair Display', serif;
+}
+
+#home .content h3 span {
+    color: #ff5733;
+    font-family: 'Playfair Display', serif;
 }
 
 #home .content p {
     margin-top: 10px;
     color: white;
     margin-left: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
 }
 
-#btn {
+#shop-now-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #ff5733;
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#shop-now-btn:hover {
+    background-color: #b47263;
+}
+
+/* --- Responsive Design --- */
+
+/* Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+    #home .content {
+        padding-left: 50px;
+    }
+
+    #home .content h3 {
+        font-size: 40px; /* Reduce heading size */
+    }
+
+    #home .content p {
+        font-size: 18px; /* Adjust paragraph size */
+    }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    #home {
+        justify-content: center; /* Center-align content horizontally */
+        text-align: center; /* Center-align text */
+        padding: 0 20px;
+    }
+
+    #home .content {
+        padding-left: 0; /* Remove side padding */
+    }
+
+    #home .content h3 {
+        font-size: 32px; /* Smaller heading size */
+        margin-left: 0;
+    }
+
+    #home .content p {
+        font-size: 16px; /* Smaller paragraph size */
+        margin-left: 0;
+    }
+
+    #shop-now-btn {
+        font-size: 14px; /* Adjust button size */
+        padding: 8px 15px;
+    }
+}
+
+/* Smaller Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+    #home .content h3 {
+        font-size: 28px; /* Even smaller heading size */
+    }
+
+    #home .content p {
+        font-size: 14px; /* Smaller paragraph size */
+    }
+
+    #shop-now-btn {
+        font-size: 12px;
+        padding: 7px 12px;
+    }
+}
+
+
+/* #btn {
     width: 150px;
     height: 36px;
     margin-top: 20px;
@@ -184,9 +254,19 @@
 #btn:hover {
     background: #b2744c;
     color: white;
-}
+} */
 
 /* About Section */
+.section {
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: bold;
+    transition: background-color 0.5s ease; /* Smooth color transition */
+}
+
 #about {
     width: 100%;
     padding-top: 70px;
@@ -194,6 +274,8 @@
 
 #about .heading{
     margin-bottom: 60px;
+    font-family: 'Playfair Display', serif;
+    color: #ff5733
 }
 
 #about .container {
@@ -227,7 +309,7 @@
     background: #f7f5f2;
     transition: 0.5s;
     cursor: pointer;
-    padding: 50px 0; 
+    padding: 50px 0;
 }
 
 #top-cards .heading2 {
@@ -284,7 +366,7 @@
 /* Gallery Section */
 #gallary {
     width: 100%;
-    padding: 50px 0; 
+    padding: 50px 0;
 }
 
 #gallary .card:hover {
@@ -333,7 +415,7 @@
     height: 56vh;
     background: black;
     margin-top: 20px;
-    padding: 20px; 
+    padding: 20px;
 }
 
 #contact h1 {
@@ -350,24 +432,108 @@
 
 /* Blogs Section */
 #blogs {
-    width: 100%;
-    padding: 50px 0; 
-    margin-top: 300px;
+    background-color: #f9f9f9;
+    padding: 50px 0;
+    font-family: 'Arial', sans-serif;
 }
 
-#blogs .container {
-    margin-top: 60px;
-}
-
-#blogs span {
-    color: #b2744c;
-}
-.heading7 {
+#blogs .heading7 {
     text-align: center;
-    color: black;
-    font-size: 30px;
+    font-size: 2.5rem;
     font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
 }
+
+#blogs .heading7 span {
+    color: #ff5722; /* Highlight color */
+}
+
+/* Container Styling */
+#blogs .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Card Styling */
+#blogs .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#blogs .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+#blogs .card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+#blogs .card-body {
+    padding: 20px;
+}
+
+#blogs .card-body h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#blogs .card-body h5 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+#blogs .card-body p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+#blogs .card-body button {
+    background-color: #ff5722;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#blogs .card-body button:hover {
+    background-color: #e64a19;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #blogs .card {
+        margin-bottom: 20px;
+    }
+
+    #blogs .heading7 {
+        font-size: 2rem;
+    }
+
+    #blogs .card-body h3 {
+        font-size: 1.2rem;
+    }
+
+    #blogs .card-body p {
+        font-size: 0.9rem;
+    }
+}
+
 
 
 /* Footer Section */
@@ -375,7 +541,7 @@
     width: 100%;
     background: #b2744c;
     margin-top: 50px;
-    padding: 30px 0; 
+    padding: 30px 0;
 }
 
 .footer-logo img {
@@ -504,12 +670,12 @@ form#myForm button {
     }
 
     #logo img {
-        width: 120px; 
-        margin-left: 20px; 
+        width: 120px;
+        margin-left: 20px;
     }
 
     .nav-item .nav-link {
-        margin-left: 5px; 
+        margin-left: 5px;
     }
 
     .heading {
@@ -517,7 +683,7 @@ form#myForm button {
     }
 
     #btn {
-        width: 120px; 
+        width: 120px;
         height: 32px;
         margin-top: 15px;
     }
@@ -527,23 +693,23 @@ form#myForm button {
     .heading5,
     .heading6,
     #blogs .heading7 {
-        font-size: 20px; 
-        
+        font-size: 20px;
+
     }
 }
 
 @media screen and (max-width: 576px) {
     .navbar-nav {
-        margin-left: 10px; 
+        margin-left: 10px;
     }
 
     #logo img {
-        width: 100px; 
-        margin-left: 10px; 
+        width: 100px;
+        margin-left: 10px;
     }
 
     .nav-item .nav-link {
-        margin-left: 3px; 
+        margin-left: 3px;
     }
 
     .heading {
@@ -551,9 +717,9 @@ form#myForm button {
     }
 
     #btn {
-        width: 100px; 
-        height: 28px; 
-        margin-top: 10px; 
+        width: 100px;
+        height: 28px;
+        margin-top: 10px;
     }
 
     .heading3,

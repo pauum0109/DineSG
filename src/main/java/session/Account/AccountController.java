@@ -24,8 +24,11 @@ public class AccountController {
         this.userInformationRepo = userInformationRepo;
     }
     @GetMapping("/getUserInformation")
-    public ResponseEntity<UserInformation> getUserInformation(HttpSession session,@RequestParam int id) {
-        return ResponseEntity.ok(userInformationRepo.getUserInformation(id));
+    public String getUserInformation(HttpSession session,@RequestParam int id,Model model) {
+        Integer user = (Integer) session.getAttribute("user");
+        UserInformation userInformation = userInformationRepo.getUserInformation(user);
+        model.addAttribute("userInformation",userInformation);
+        return "updateInformation" ;
     }
     @GetMapping("/login")
     public String login(HttpSession session, Model model, HttpServletResponse response) {
@@ -33,10 +36,14 @@ public class AccountController {
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
-        if (session.getAttribute("user") != null&&!model.containsAttribute("state")) {
-            return "redirect:/index";
+        // Check if user is already logged in
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId != null) {
+            String username = accountService.getUsernameByUserId(userId); // Use the new service method
+            model.addAttribute("username", username); // Add username to the model
+            return "index"; // Redirect to the homepage or wherever appropriate
         }
-        return "form";
+        return "login"; // Login form
     }
     @GetMapping("/verifyEmail")
     public String recover() {
@@ -68,13 +75,18 @@ public class AccountController {
     @GetMapping("/createUserInformation/{id}")
     public String createUserInformation(HttpSession session, @PathVariable String id,Model model){
         model.addAttribute("account_id",id);
-        return "information";
+        return "createInformation";
     }
     @GetMapping("/logout")
-    public String logout(HttpSession session){
-        session.removeAttribute("user");
-        return "redirect:/index";
+    public String logout(HttpSession session) {
+        session.invalidate(); // Clear the session
+        return "redirect:/index"; // Redirect to the homepage or login page
     }
+    //    @GetMapping("/logout")
+//    public String logout(HttpSession session){
+//        session.removeAttribute("user");
+//        return "redirect:/index";
+//    }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/login")
     public String loginTest(HttpSession session, @RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
@@ -100,6 +112,7 @@ public class AccountController {
             return "redirect:/account/register";
         }
         redirectAttributes.addFlashAttribute("state", res.getStatus().toString());
+        redirectAttributes.addFlashAttribute("email", email);
         return "redirect:/account/createUserInformation/"+res.getData().id();
     }
     @PutMapping("/changePassword")

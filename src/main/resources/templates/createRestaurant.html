@@ -1,54 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<!--{Example
-  "name": "Sample Restaurant",
-  "address": "123 Main St",
-  "district": "1",
-  "picture": "image_url",
-  "open_time": "09:00",
-  "close_time": "22:00",
-  "phone_number": "123-456-7890",
-      "description": "A sample description of the restaurant.",
-  "category": ["bar", "club"]//Option theo id trong category
-}-->
-<script>
-    document.getElementById('myForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const formObject = {};
-        formData.forEach((value, key) => {
-            formObject[key] = value;
-            console.log(key, value);
-        });
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
-        try {
-            const response = await fetch('/admin/createRestaurant', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type to JSON
-                },
-                body: JSON.stringify(formObject), // Convert object to JSON
-            });
-
-            if (response.ok) {
-                alert('Form submitted successfully!');
-                window.location.href = '/account/login';
-            } else {
-                console.error('Error:', response.statusText);
-                alert('Form submission failed!');
-            }
-        } catch (error) {
-            console.error('Request failed:', error);
-            alert('An error occurred!');
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: 16px; /* Increased font size */
+            line-height: 1.7;
+            color: #fff;
+            background-color: #b2744c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-    });
-</script>
-<body>
 
+        .card-3d-wrap {
+            position: relative;
+            width: 440px;
+            max-width: 100%;
+            height: 500px;
+            margin-top: 40px;
+        }
+
+        .card-front {
+            background-color: #2a2b38;
+            border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-heading {
+            font-size: 30px; /* Increased font size */
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .form-container {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-style {
+            padding: 13px 20px;
+            height: 48px;
+            width: 100%;
+            font-weight: 500;
+            border-radius: 4px;
+            font-size: 16px; /* Increased font size */
+            color: #c4c3ca;
+            background-color: #1f2029;
+            border: none;
+            padding-left: 40px; /* Space for the icon */
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #c4c3ca;
+        }
+
+        .form-group.description i {
+            top: 10px; /* Align to the top for the description */
+            transform: translateY(0);
+        }
+
+        .btn {
+            border-radius: 4px;
+            height: 48px;
+            width: 100%;
+            font-size: 14px; /* Increased font size */
+            font-weight: 600;
+            text-transform: uppercase;
+            background-color: #b2744c;
+            color: #fff;
+            border: none;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+            color: #b2744c;
+        }
+
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns for the checkboxes */
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        /* Add spacing to the second column */
+        .checkbox-container > div:nth-child(odd) {
+            padding-right: 20px;
+        }
+
+        .checkbox-container label {
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        .checkbox-container input {
+            margin-right: 10px;
+        }
+
+        #restaurantDescription {
+            height: 150px; /* Increased textarea height */
+        }
+
+        .category-label {
+            font-size: 20px; /* Increased font size */
+            color: #fff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<div class="card-3d-wrap">
+    <div class="card-front">
+        <div class="form-heading">Create Restaurant</div>
+        <form class="form-container">
+            <div class="form-group">
+                <i class="fa fa-cutlery"></i>
+                <input type="text" id="restaurantName" class="form-style" placeholder="Restaurant Name" />
+            </div>
+
+            <div class="form-group">
+                <i class="fa fa-map-marker"></i>
+                <input type="text" id="restaurantAddress" class="form-style" placeholder="Address" />
+            </div>
+
+            <div class="form-group">
+                <i class="fa fa-building"></i>
+                <select id="restaurantDistrict" class="form-style">
+                    <option value="" selected disabled>Select District</option>
+                    <option>District 1</option>
+                    <option>District 2</option>
+                    <option>District 3</option>
+                    <option>District 4</option>
+                    <option>District 5</option>
+                    <option>District 6</option>
+                    <option>District 7</option>
+                    <option>District 8</option>
+                    <option>District 9 (Thu Duc City)</option>
+                    <option>District 10</option>
+                    <option>District 11</option>
+                    <option>District 12</option>
+                    <option>Binh Tan District</option>
+                    <option>Binh Thanh District</option>
+                    <option>Go Vap District</option>
+                    <option>Phu Nhuan District</option>
+                    <option>Tan Binh District</option>
+                    <option>Tan Phu District</option>
+                    <option>Nha Be District</option>
+                    <option>Can Gio District</option>
+                    <option>Cu Chi District</option>
+                    <option>Hoc Mon District</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <i class="fa fa-image"></i>
+                <input type="text" id="restaurantPicture" class="form-style" placeholder="Picture Link" />
+            </div>
+
+            <div class="form-group">
+                <i class="fa fa-clock"></i>
+                <input type="time" id="restaurantOpenTime" class="form-style" />
+            </div>
+
+            <div class="form-group">
+                <i class="fa fa-clock"></i>
+                <input type="time" id="restaurantCloseTime" class="form-style" />
+            </div>
+
+            <div class="form-group">
+                <i class="fa fa-phone"></i>
+                <input type="tel" id="restaurantPhoneNumber" class="form-style" placeholder="Phone Number" />
+            </div>
+
+            <div class="form-group description">
+                <textarea id="restaurantDescription" class="form-style" placeholder="Description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="category-label">Category</div>
+                <div class="checkbox-container">
+                    <div>
+                        <input type="checkbox" id="categoryBar" name="category" value="Bar">
+                        <label for="categoryBar">Bar</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="categoryCafe" name="category" value="Cafe">
+                        <label for="categoryCafe">Cafe</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="categoryClub" name="category" value="Club">
+                        <label for="categoryClub">Club</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="categoryDinner" name="category" value="Dinner">
+                        <label for="categoryDinner">Dinner</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="categoryEvent" name="category" value="Event">
+                        <label for="categoryEvent">Event</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="categoryActivity" name="category" value="Activity">
+                        <label for="categoryActivity">Activity</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
+
 </html>

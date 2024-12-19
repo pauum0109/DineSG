@@ -1,13 +1,16 @@
 package session.Restaurant.DTO;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import session.Restaurant.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+
 public class RestaurantDTO {
     private String restaurant_id= String.valueOf((int) (Math.random() * 9000) + 1000);
     private String name;

@@ -1,11 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Error - Bad Request</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #fff;
+            background-color: #b2744c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card-error-wrap {
+            position: relative;
+            width: 440px;
+            max-width: 100%;
+            height: auto;
+            background-color: #2a2b38;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .error-icon {
+            font-size: 50px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .error-description {
+            font-size: 16px;
+            color: #c4c3ca;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            border-radius: 4px;
+            height: 48px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 200ms linear;
+            padding: 0 30px;
+            letter-spacing: 1px;
+            text-align: center;
+            border: none;
+            background-color: #b2744c;
+            color: #fff;
+            box-shadow: 0 8px 24px 0 rgba(18, 248, 173, .2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+            color: #b2744c;
+        }
+    </style>
 </head>
+
 <body>
-<h1>Bad reqest</h1>
+<div class="card-error-wrap">
+    <i class="fa fa-exclamation-triangle error-icon"></i>
+    <!--    <div class="error-title">Bad Request</div>-->
+    <div class="error-description">
+        Sorry, the request could not be processed due to invalid input, or you do not allow to access it.
+    </div>
+    <a href="/" class="btn">Return to Home</a>
+</div>
 </body>
+
 </html>

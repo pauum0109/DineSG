@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DineSaigon - Discover Cafes and Restaurants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .text-section {
+            flex: 1;
+            max-width: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .text-section h1 {
+            font-size: 1.6rem;
+            color: #b2744c;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+        .text-section p {
+            font-style: italic;
+            color: #000000;
+            line-height: 1.5;
+        }
+        .text-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .text-section li {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .text-section li::before {
+            content: '✔';
+            color: #ffcc00;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .text-section span {
+            color: #000000;
+        }
+        .text-section .final-text {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #000000;
+        }
+        .image-section {
+            flex: 1;
+            max-width: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .image-section img {
+            max-width: 100%;
+            border: 1px solid #444;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .text-section, .image-section {
+                max-width: 100%;
+                flex: unset;
+            }
+            .text-section h1 {
+                font-size: 1.4rem;
+            }
+            .text-section p, .text-section .final-text {
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .text-section h1 {
+                font-size: 1.2rem;
+            }
+            .text-section p, .text-section .final-text {
+                font-size: 0.9rem;
+            }
+            .text-section li::before {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-section">
+        <h1>Discover Saigon's Food and Cafe Culture</h1>
+        <p>
+            Welcome to <strong>DineSaigon</strong>, your ultimate guide to exploring the vibrant cafes and restaurants across Saigon. Discover places by cuisine, ambiance, or location with ease.
+        </p>
+        <ul>
+            <li><span>Explore a rich variety of cafes, street food, and fine dining spots.</span></li>
+            <li><span>View detailed menus, reviews, and ratings for every location.</span></li>
+            <li><span>Book tables remotely and secure your spot effortlessly.</span></li>
+        </ul>
+        <p class="final-text">
+            Whether you're a local foodie or a curious tourist, <strong>DineSaigon</strong> helps you experience Saigon’s food culture like never before. Start exploring and reserving your next dining adventure today!
+        </p>
+    </div>
+    <div class="image-section">
+        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2a/33/10/3e/manila-bay-kitchen-is.jpg?w=600&h=400&s=1" alt="Saigon Cafe and Restaurant">
+    </div>
+</div>
+</body>
+</html>

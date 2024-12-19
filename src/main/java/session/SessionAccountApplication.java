@@ -6,8 +6,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-public class SessionAcoountApplication {
+public class SessionAccountApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SessionAcoountApplication.class, args);
+        SpringApplication.run(SessionAccountApplication.class, args);
     }
 }
