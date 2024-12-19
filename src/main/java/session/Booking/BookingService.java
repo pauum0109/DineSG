@@ -110,7 +110,7 @@ public class BookingService {
      * Account Generate Booking
      */
     public void createUserBooking(TableBooking booking) {
-        bookingRepo.createUserBooking(booking.getBookingId(), booking.getUser_id(), booking.getRestaurantId(), booking.getCustomer_name(), booking.getPhoneNumber(), booking.getBookingAt(), booking.getNumOfGuests(), booking.getNotes(),booking.getEmail());
+        bookingRepo.createUserBooking(booking.getBookingId(), booking.getRestaurantId(), booking.getCustomer_name(), booking.getPhoneNumber(), booking.getBookingAt(), booking.getNumOfGuests(), booking.getNotes(),booking.getEmail());
     }
     /**
      * Found owner booking base on owner_id, bookingStatus

@@ -50,7 +50,7 @@ public class TableBooking {
     @Transient // This field is not persisted in the database
     private String BookingAt;
     @Transient // This field is not persisted in the database
-    private String user_id;
+    private Integer user_id;
     @NotNull
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

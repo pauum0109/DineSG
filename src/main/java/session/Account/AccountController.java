@@ -31,20 +31,26 @@ public class AccountController {
         return "updateInformation" ;
     }
     @GetMapping("/login")
-    public String login(HttpSession session, Model model, HttpServletResponse response) {
-
+    public String login(HttpSession session, Model model, HttpServletResponse response, @RequestParam(value = "username", required = false) String username) {
+        // Prevent caching of the login page
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
-        // Check if user is already logged in
+
         Integer userId = (Integer) session.getAttribute("user");
         if (userId != null) {
-            String username = accountService.getUsernameByUserId(userId); // Use the new service method
-            model.addAttribute("username", username); // Add username to the model
-            return "index"; // Redirect to the homepage or wherever appropriate
+            String loggedInUsername = accountService.getUsernameByUserId(userId);
+            model.addAttribute("username", loggedInUsername);
+            return "redirect:/";
         }
-        return "login"; // Login form
+
+        if (username != null) {
+            model.addAttribute("username", username); // Add username from flash attributes
+        }
+
+        return "login";
     }
+
     @GetMapping("/verifyEmail")
     public String recover() {
         return "verify";
@@ -82,24 +88,22 @@ public class AccountController {
         session.invalidate(); // Clear the session
         return "redirect:/index"; // Redirect to the homepage or login page
     }
-    //    @GetMapping("/logout")
-//    public String logout(HttpSession session){
-//        session.removeAttribute("user");
-//        return "redirect:/index";
-//    }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/login")
     public String loginTest(HttpSession session, @RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
-        State<UserDTO> res = accountService.login(username, password);//Server check
+        State<UserDTO> res = accountService.login(username, password); // Server check
         if (res.getStatus() != Status.SUCCESS) {
-            redirectAttributes.addFlashAttribute("state", res.getStatus().toString());//Set state
-            return "redirect:/account/login";
+            redirectAttributes.addFlashAttribute("state", res.getStatus().toString()); // Set state
+            return "redirect:/account/login"; // Redirect back to login if login fails
         }
-        //Login thành công se tao session store user id.
+        // If login is successful, create session and store user id.
         session.setAttribute("user", res.getData().id());
-        redirectAttributes.addFlashAttribute("state", res.getStatus().toString());
-        return "redirect:/account/login";
+        redirectAttributes.addFlashAttribute("username", username); // Add username to flash attributes
+        redirectAttributes.addFlashAttribute("state", res.getStatus().toString()); // Set state
+        return "redirect:/"; // Redirect to home page
     }
+
     @PostMapping("/register")
     public String register(HttpSession session, @RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email, RedirectAttributes redirectAttributes) throws Exception {
         createUserDTO accountDto = new createUserDTO(username, password, email, "USER");

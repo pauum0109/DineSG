@@ -21,7 +21,7 @@ public class CreateBookTableDTO {
     public static TableBooking toEntity(CreateBookTableDTO createBookTableDTO, Integer user_id) {
         TableBooking tableBooking = new TableBooking();
         tableBooking.setBookingId(createBookTableDTO.getBooking_id());
-        tableBooking.setUser_id(user_id.toString());
+        //tableBooking.setUser_id(user_id);
         tableBooking.setRestaurantId(createBookTableDTO.getRestaurant_id());
         tableBooking.setCustomer_name(createBookTableDTO.getName());
         tableBooking.setPhoneNumber(createBookTableDTO.getPhone());

@@ -1,18 +1,18 @@
 package session.Restaurant;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.ui.Model;
 import session.Restaurant.DTO.CommentDTO;
 import session.Restaurant.DTO.RestaurantResponseDto;
+import session.Restaurant.DTO.RestaurantResponseIndexDto;
 import session.Restaurant.DTO.addCategoryDTO;
 import session.Restaurant.Model.Comment;
 import session.Restaurant.Model.District;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -39,14 +39,6 @@ public class RestaurantRestController {
     public List<District> getD() {
         return restaurantService.getDistrict();
     }
-//    @GetMapping("/getOwnerRestaurant")
-//    public List<Restaurant> getOwnerRestaurant(HttpSession session, @RequestParam(value = "owner_id", required = false) String owner_id) {
-//        String user_id = (String) session.getAttribute("user_id");
-//        if(user_id == null) {
-//            return restaurantService.getOwnerRestaurant(Integer.parseInt(owner_id));
-//        }
-//        return restaurantService.getOwnerRestaurant(Integer.parseInt(user_id));
-//    }
 
     @PostMapping("/insertCategory")
     public ResponseEntity<Map<String, Object>> insertCategory(@RequestBody addCategoryDTO addCategoryDTO) {
@@ -61,6 +53,7 @@ public class RestaurantRestController {
         }
 
     }
+
     @GetMapping("/getComment")
     public ResponseEntity<List<CommentDTO>> getComment(@RequestParam(value = "restaurant_id") String restaurant_id) {
         return ResponseEntity.ok().body(restaurantService.getCommentByRestaurant(Integer.parseInt(restaurant_id)));
@@ -69,6 +62,38 @@ public class RestaurantRestController {
     public ResponseEntity<Object> createComment(@RequestBody CommentDTO comment, @PathVariable String user_id) {
         restaurantService.createComment(Integer.parseInt(user_id),comment);
         return ResponseEntity.ok().body(comment);
+    }
+
+    @GetMapping("/top3")
+    public List<RestaurantResponseIndexDto> findTop3ByRating() {
+        List<Restaurant> top3Restaurants = restaurantService.getTop3RestaurantsByRating();
+
+        // Map each Restaurant to RestaurantResponseIndexDto
+        return top3Restaurants.stream()
+                .map(restaurant -> new RestaurantResponseIndexDto(restaurant)) // Create DTO for each restaurant
+                .collect(Collectors.toList()); // Collect the result as a List
+    }
+
+    @GetMapping("/all")
+    public List<RestaurantResponseIndexDto> findAllRestaurant() {
+        List<Restaurant> allRestaurant = restaurantService.getAllRestaurants();
+
+        return allRestaurant.stream()
+                .map(restaurant -> new RestaurantResponseIndexDto(restaurant)) // Create DTO for each restaurant
+                .collect(Collectors.toList()); // Collect the result as a List
+    }
+
+    @GetMapping("/get/category/{categoryId}")
+    public ResponseEntity<List<RestaurantResponseIndexDto>> getRestaurantsByCategory(@PathVariable String categoryId) {
+        Optional<List<Restaurant>> restaurants = restaurantService.getByCategory(categoryId);
+        if (restaurants.isPresent() && !restaurants.get().isEmpty()) {
+            List<RestaurantResponseIndexDto> restaurantDtos = restaurants.get().stream()
+                    .map(RestaurantResponseIndexDto::new)  // Assuming your RestaurantResponseIndexDto constructor maps the restaurant
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok().body(restaurantDtos);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
 }

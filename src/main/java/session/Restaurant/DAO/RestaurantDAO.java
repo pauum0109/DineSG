@@ -31,14 +31,23 @@ public class RestaurantDAO {
         }
     }
 
-    public Optional<List<Restaurant>> getByCategory(String category) {
+    public Optional<List<Restaurant>> getByCategory(String categoryId) {
         try {
-            String query = "select  view_restaurant.* from view_restaurant\n" + "where view_restaurant.restaurant_id\n" + "in (SELECT restaurant_id FROM restaurant_category where category_id = ?)";
-            return Optional.ofNullable(jdbcTemplate.query(query, new Restaurant(), category));
+            // Query to fetch all restaurants that match the given category_id
+            String query = "SELECT r.* FROM restaurant r " +
+                    "JOIN restaurant_category rc ON r.restaurant_id = rc.restaurant_id " +
+                    "WHERE rc.category_id = ?";
+
+            // Execute the query and map the result to Restaurant objects
+            List<Restaurant> restaurants = jdbcTemplate.query(query, new Object[]{categoryId}, new Restaurant());
+
+            return Optional.ofNullable(restaurants);
         } catch (Exception e) {
+            e.printStackTrace();
             return Optional.empty();
         }
     }
+
 
     public Optional<List<Restaurant>> getByCategoryDistrict(String category, String district) {
         try {

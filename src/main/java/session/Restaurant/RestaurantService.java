@@ -127,4 +127,8 @@ public class RestaurantService {
         return allRestaurants.orElse(Collections.emptyList());
     }
 
+    public Optional<List<Restaurant>> getByCategory(String category) {
+        return restaurantDAO.getByCategory(category);
+    }
+
 }
