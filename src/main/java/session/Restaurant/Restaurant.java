@@ -37,7 +37,7 @@ public class Restaurant implements RowMapper<Restaurant> {
         res.setOpen_time(rs.getString("open_time"));
         res.setClose_time(rs.getString("close_time"));
         res.setPhone_number(rs.getString("phone_number"));
-        res.setOwner_id(rs.getInt("owner_id"));
+        //res.setOwner_id(rs.getInt("owner_id"));
         res.setDescription(rs.getString("restaurant_description"));
         res.setRating(rs.getDouble("rating"));
         return res;

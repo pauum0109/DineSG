@@ -12,7 +12,9 @@ import session.Restaurant.Model.District;
 import session.userInformation.UserInformation;
 import session.userInformation.UserInformationRepo;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -111,8 +113,18 @@ public class RestaurantService {
         commentDAO.save(CommentDTO.toEntity(comment,user_id));
     }
 
-
     public List<Category> getCategory() {
         return categoryDAO.findAll();
     }
+
+    public List<Restaurant> getTop3RestaurantsByRating() {
+        Optional<List<Restaurant>> top3Restaurants = restaurantDAO.findTop3ByRating();
+        return top3Restaurants.orElse(Collections.emptyList());
+    }
+
+    public List<Restaurant> getAllRestaurants() {
+        Optional<List<Restaurant>> allRestaurants = restaurantDAO.findAll();
+        return allRestaurants.orElse(Collections.emptyList());
+    }
+
 }

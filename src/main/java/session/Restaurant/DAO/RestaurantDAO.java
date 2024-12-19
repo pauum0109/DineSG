@@ -18,7 +18,7 @@ public class RestaurantDAO {
     }
 
     public Optional<List<Restaurant>> findAll() {
-        String query = "select * FROM view_restaurant";
+        String query = "select * FROM restaurant";
         return Optional.ofNullable(jdbcTemplate.query(query, new Restaurant()));
     }
 
@@ -85,7 +85,6 @@ public class RestaurantDAO {
         }
     }
 
-
     public List<Restaurant> getOwnerRestaurant(int ownerId)  {
         try {
             String query = "select  * from view_restaurant where restaurant_id in(select restaurant_id from ownrestaurant where user_id = ?);";
@@ -94,7 +93,6 @@ public class RestaurantDAO {
             return null;
         }
     }
-
 
     public void updateRestaurant(String restaurantId, String name, String district, String address, String description, String picture, String phoneNumber, String openTime, String closeTime) {
         try {
@@ -115,4 +113,17 @@ public class RestaurantDAO {
             return ;
         }
     }
+
+    public Optional<List<Restaurant>> findTop3ByRating() {
+        try {
+            String query = "SELECT * FROM restaurant ORDER BY rating DESC LIMIT 3";
+            List<Restaurant> top3Restaurants = jdbcTemplate.query(query, new Restaurant());
+            return Optional.ofNullable(top3Restaurants);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+
 }
