@@ -131,4 +131,11 @@ public class RestaurantService {
         return restaurantDAO.getByCategory(category);
     }
 
+    public Optional<List<Restaurant>> getByDistrict(String district) {
+        return restaurantDAO.getByDistrict(district);
+    }
+
+    public Optional<List<Restaurant>> getByCategoryAndDistrict(String category, String district) {
+        return restaurantDAO.getByCategoryDistrict(category, district);
+    }
 }

@@ -39,4 +39,9 @@ public class RestaurantPageController {
         }
     }
 
+    @GetMapping("/restaurant/show/filter/")
+    public String getRestaurantsByCategoryAndDistrictPage() {
+        return "filteredRestaurantsPage";
+    }
+
 }

@@ -24,7 +24,7 @@ public class RestaurantDAO {
 
     public Optional<List<Restaurant>> getByDistrict(String district)  {
         try {
-            String query = "select * FROM view_restaurant WHERE restaurant_district = ?";
+            String query = "select * FROM restaurant WHERE restaurant_district = ?";
             return Optional.ofNullable(jdbcTemplate.query(query, new Restaurant(), district));
         } catch (Exception e) {
             return Optional.empty();
@@ -33,14 +33,10 @@ public class RestaurantDAO {
 
     public Optional<List<Restaurant>> getByCategory(String categoryId) {
         try {
-            // Query to fetch all restaurants that match the given category_id
             String query = "SELECT r.* FROM restaurant r " +
                     "JOIN restaurant_category rc ON r.restaurant_id = rc.restaurant_id " +
                     "WHERE rc.category_id = ?";
-
-            // Execute the query and map the result to Restaurant objects
             List<Restaurant> restaurants = jdbcTemplate.query(query, new Object[]{categoryId}, new Restaurant());
-
             return Optional.ofNullable(restaurants);
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +47,7 @@ public class RestaurantDAO {
 
     public Optional<List<Restaurant>> getByCategoryDistrict(String category, String district) {
         try {
-            String query = "select  * from view_restaurant where restaurant_id\n" + "in (SELECT restaurant_id FROM restaurant_category where category_id = ? AND view_restaurant.restaurant_district = ?)";
+            String query = "select  * from restaurant where restaurant_id\n" + "in (SELECT restaurant_id FROM restaurant_category where category_id = ? AND restaurant.restaurant_district = ?)";
             return Optional.ofNullable(jdbcTemplate.query(query, new Restaurant(), category, district));
         } catch (Exception e) {
             return Optional.empty();
