@@ -92,7 +92,7 @@ public class RestaurantDAO {
 
     public List<Restaurant> getOwnerRestaurant(int ownerId)  {
         try {
-            String query = "select  * from view_restaurant where restaurant_id in(select restaurant_id from ownrestaurant where user_id = ?);";
+            String query = "select  * from restaurant where restaurant_id in(select restaurant_id from ownrestaurant where user_id = ?);";
             return jdbcTemplate.query(query, new Restaurant(), ownerId);
         } catch (Exception e) {
             return null;

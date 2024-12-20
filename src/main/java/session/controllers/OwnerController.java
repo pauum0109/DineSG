@@ -37,11 +37,10 @@ public class OwnerController {
         this.emailService = emailService;
     }
 
-
-
     @GetMapping("/getBookingOrder")
     public String getAdminBooking(HttpSession session,@RequestParam(required = false) Integer status, Model model, @RequestParam(required = false) Integer restaurant_id) {
         Integer user =(Integer) session.getAttribute("user");
+        System.out.println(user);
         List<bookTableDTO> orders = bookingService.getOwnerBooking(user, status,restaurant_id);
         List<Restaurant> restaurants = restaurantService.getOwnerRestaurant(user, restaurant_id);
         List<Category> categories = restaurantService.getCategory();

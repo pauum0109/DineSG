@@ -10,8 +10,6 @@ import session.utils.Enum.BookingStatus;
 
 import java.util.List;
 
-//@Description: This interface is used to interact with the database to perform CRUD operations on the BookingDecision table.
-//@Param: View the BookingDecision table for admin of the restaurant
 
 public interface BookingDecisionRepo extends JpaRepository<BookingDecision, Integer> {
     @Query("SELECT b FROM BookingDecision b WHERE b.adminUserId = :id and b.status = :status")
@@ -28,7 +26,7 @@ public interface BookingDecisionRepo extends JpaRepository<BookingDecision, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "call update_booking_status(:id,:s)", nativeQuery = true)
+    @Query(value = "update booking_decisions set admin_status = :s where booking_id = :id", nativeQuery = true)
     void updateStatus(int id, String s);
 
     @Modifying

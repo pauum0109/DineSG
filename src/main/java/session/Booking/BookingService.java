@@ -62,6 +62,7 @@ public class BookingService {
     public void updateDecision(int booking_id, String status, String note) {
         if (status != null) {
             bookingDecisionRepo.updateStatus(booking_id, status);
+            bookingRepo.updateStatus(booking_id, status);
         }
         // Process note update if note is provided
         if (note != null) {
@@ -89,6 +90,7 @@ public class BookingService {
     public void createDecision(int admin_user_id, createDecisionDTO decision) {
         bookingDecisionRepo.createDecision(decision.getDecision_id(), admin_user_id, Integer.parseInt(decision.getBooking_id()), decision.getNote(), decision.getStatus());
         bookingDecisionRepo.updateStatus(Integer.parseInt(decision.getBooking_id()), decision.getStatus());
+        bookingRepo.updateStatus(Integer.parseInt(decision.getBooking_id()), decision.getStatus());
     }
 
     /**
@@ -111,6 +113,7 @@ public class BookingService {
      */
     public void createUserBooking(TableBooking booking) {
         bookingRepo.createUserBooking(booking.getBookingId(), booking.getRestaurantId(), booking.getCustomer_name(), booking.getPhoneNumber(), booking.getBookingAt(), booking.getNumOfGuests(), booking.getNotes(),booking.getEmail());
+        bookingRepo.createBooking(booking.getBookingId(), booking.getUser_id());
     }
     /**
      * Found owner booking base on owner_id, bookingStatus

@@ -15,6 +15,12 @@ public interface  BookingRepo extends JpaRepository<TableBooking, Integer> {
             "VALUES (:bid, :restaurant, :customer, :phone, :time, :guests, :note, :email)", nativeQuery = true)
     void createUserBooking(int bid, int restaurant, String customer, String phone, String time, int guests, String note, String email);
 
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO book (booking_id, user_id) " +
+            "VALUES (:bid, :uid)", nativeQuery = true)
+    void createBooking(int bid, int uid);
+
     @Query(value = "select  * from table_booking where booking_id in (select booking_id from book where user_id = :id)" +
             "ORDER BY booking_status, updated_at ASC ;", nativeQuery = true)
     List<TableBooking> getListUserBooking(int id);
@@ -22,11 +28,15 @@ public interface  BookingRepo extends JpaRepository<TableBooking, Integer> {
     @Query(value = "select * from table_booking where booking_id in (select booking_id from book where user_id = :userId )and booking_status = :status", nativeQuery = true)
     List<TableBooking> getUserBookingByStatus(int userId, String status);
 
-    @Query(value="select * from table_booking where restaurant_id in (select restaurant_id from ownrestaurant where user_id = 6441);", nativeQuery = true)
+    @Query(value="select * from table_booking where restaurant_id in (select restaurant_id from ownrestaurant where user_id = :owner_id);", nativeQuery = true)
     List<TableBooking> getOwnerBooking(int owner_id);
     @Modifying
     @Query(value = "UPDATE table_booking SET name =:name, phone_number =:phone, booking_date =:date, num_of_guests =:guests, booking_note =:note\n" +
             "WHERE booking_id = :bid", nativeQuery = true)
     void updateUserBooking(int bid, String name, String phone, String date, int guests, String note);
 
+    @Modifying
+    @Transactional
+    @Query(value = "update table_booking set booking_status = :s where booking_id = :id", nativeQuery = true)
+    void updateStatus(int id, String s);
 }
