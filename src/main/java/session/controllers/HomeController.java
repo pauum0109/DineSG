@@ -79,6 +79,10 @@ public class    HomeController {
 
     @RequestMapping("/index")
     public String index(HttpSession session, Model model, @RequestParam(required = false) String district,@RequestParam(required = false) String category) {
+        String username = (String) session.getAttribute("username");
+        if (username != null) {
+            model.addAttribute("username", username); // Add username to model for rendering
+        }
         List<Restaurant> restaurantList = restaurantService.getRestaurant(district , null);
         List<District> districtList = restaurantService.getDistrict();
         model.addAttribute("restaurantList", restaurantList);

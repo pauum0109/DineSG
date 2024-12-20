@@ -89,12 +89,12 @@
 <div class="card-3d-wrap">
     <h2 class="card-title">User Information</h2>
     <div class="account-details">
-        <p>ID: <span th:text="${account.id}"></span></p>
-        <p>Name: <span th:text="${account.username}"></span></p>
-        <p>Email: <span th:text="${account.email}"></span></p>
+        <p>ID: <span th:text="${userInformation.user_id}"></span></p>
+        <p>Name: <span th:text="${userInformation.fullName}"></span></p>
+        <p>Email: <span th:text="${userInformation.email}"></span></p>
     </div>
     <div class="form-group text-center">
-        <a href="/logout" class="btn">Logout</a>
+        <a href="/account/logout" class="btn">Logout</a>
     </div>
 </div>
 </body>
