@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import session.Account.DTO.PasswordChangeRequest;
 import session.Account.DTO.UserDTO;
 import session.Account.DTO.createUserDTO;
 import session.userInformation.UserInformation;
@@ -40,16 +41,16 @@ public class AccountController {
         String username = (String) session.getAttribute("username");
 
         if (userId != null && username != null) {
-            model.addAttribute("username", username); // Add username to model
-            return "redirect:/"; // Redirect to home page if already logged in
+            model.addAttribute("username", username);
+            return "redirect:/";
         }
 
-        return "login"; // Return login page if not logged in
+        return "login";
     }
 
 
     @GetMapping("/verifyEmail")
-    public String recover() {
+    public String verify() {
         return "verify";
     }
     @GetMapping("/register")
@@ -97,7 +98,11 @@ public class AccountController {
 
         session.setAttribute("user", res.getData().id());
         redirectAttributes.addFlashAttribute("state", res.getStatus().toString());
-        return "redirect:/account/login";
+        Integer userID = (Integer) session.getAttribute("user");
+        if (accountService.isAdmin(userID)) {
+            return "redirect:/admin";
+        }
+        return "redirect:/index";
     }
 
     @PostMapping("/register")
@@ -116,21 +121,34 @@ public class AccountController {
         return "redirect:/account/createUserInformation/"+res.getData().id();
     }
 
-    @PutMapping("/changePassword")
-    public String update(HttpSession session,@RequestHeader String input) {
-        try {
-            String user = (String) session.getAttribute("user_name");
-            Status s = accountService.updatePassword(user, input);
-            switch (s) {
-                case SUCCESS:
-                    return "Password updated successfully";
-                case ACCOUNT_NOT_FOUND:
-                    return "Account not found";
-            }
-        } catch (Exception e) {
-            return "error";
+    @PostMapping("/validateOldPassword")
+    public ResponseEntity<String> validateOldPassword(HttpSession session, @RequestParam("oldPassword") String oldPassword) {
+        Integer user = (Integer) session.getAttribute("user");
+        if (user == null) {
+            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("User not authenticated.");
         }
-        return "error";
+
+        boolean isOldPasswordCorrect = accountService.verifyOldPassword(user, oldPassword);
+        if (!isOldPasswordCorrect) {
+            return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Old password is incorrect.");
+        }
+
+        return ResponseEntity.ok("Old password is correct.");
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(HttpSession session, @RequestParam("newPassword") String newPassword) {
+        Integer user = (Integer) session.getAttribute("user");
+        if (user == null) {
+            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("User not authenticated.");
+        }
+
+        Status status = accountService.updatePassword2(user, newPassword);
+        if (status == Status.SUCCESS) {
+            return ResponseEntity.ok("Password updated successfully.");
+        } else {
+            return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).body("Password update failed.");
+        }
     }
 
     @GetMapping("/info")
@@ -145,5 +163,16 @@ public class AccountController {
 
         return "person";
     }
+
+    @GetMapping("/recover")
+    public String recover() {
+        return "recover";
+    }
+
+    @GetMapping("/changePassword")
+    public String changePassword() {
+        return "changePassword";
+    }
+
 
 }

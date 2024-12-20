@@ -44,4 +44,9 @@ public class RestaurantPageController {
         return "filteredRestaurantsPage";
     }
 
+    @GetMapping("/admin")
+    public String showAdminPage() {
+        return "admin";
+    }
+
 }

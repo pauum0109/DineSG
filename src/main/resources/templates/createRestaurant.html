@@ -289,7 +289,7 @@
 
             if (response.ok) {
                 alert('Form submitted successfully!');
-                window.location.href = '/account/login';
+                window.location.href = '/admin';
             } else {
                 const errorText = await response.text(); // Get response error details
                 console.error('Error:', errorText);

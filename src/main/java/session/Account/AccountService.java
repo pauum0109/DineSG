@@ -1,6 +1,7 @@
 package session.Account;
 
 import org.springframework.stereotype.Component;
+import session.Account.DTO.PasswordChangeRequest;
 import session.Account.DTO.UserDTO;
 import session.Account.DTO.createUserDTO;
 
@@ -12,6 +13,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import session.utils.PasswordEncryptor;
+
+import javax.swing.text.html.Option;
+
 @Component
 public class AccountService {
     private final AccountDAO acc;
@@ -74,4 +80,38 @@ public class AccountService {
             }
         }).orElse(Status.ACCOUNT_NOT_FOUND);
     }
+
+    public Status updatePassword2(Integer user_id, String input) {
+        String user_name = getUsernameByUserId(user_id);
+        return acc.getByUsername(user_name).map(account -> {
+            String encrypt;
+            try {
+                encrypt = PasswordEncryptor.encryptPassword(input);
+                account.setPassword(encrypt);
+                acc.update(account);
+                return Status.SUCCESS;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).orElse(Status.ACCOUNT_NOT_FOUND);
+    }
+
+    public boolean verifyOldPassword(Integer userID, String oldPassword) {
+        Optional<Account> user = acc.getByUsername(getUsernameByUserId(userID));
+        if (PasswordEncryptor.verifyPassword(oldPassword, user.get().getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAdmin(Integer userID) {
+
+        Optional<Account> user = acc.getByUsername(getUsernameByUserId(userID));
+        String role = user.get().getRole();
+        System.out.println(role);
+       if (role.equals("ADMIN"))
+            return true;
+       return false;
+    }
+
 }

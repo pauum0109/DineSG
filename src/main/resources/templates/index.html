@@ -52,6 +52,7 @@
             justify-content: space-between;
             background: #b2744c;
             padding: 10px 20px;
+            overflow: visible;
         }
 
         .navbar .logo {
@@ -127,6 +128,9 @@
         }
 
         .dropdown-content button {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 5px 15px;
             width: 100%; /* Make buttons full width */
             background-color: #e0a24c; /* Button background */
             color: #fff; /* Text color */
@@ -136,6 +140,7 @@
             cursor: pointer;
             border-radius: 3px;
             margin-bottom: 5px; /* Space between buttons */
+            font-family: 'Roboto', sans-serif;
         }
 
         .dropdown-content button:hover {
@@ -239,10 +244,13 @@
                 <a href="/account/logout" class="button">Logout</a>
                 <script th:inline="javascript">
                     var userId = /*[[${user.id}]]*/ 'defaultUserId';  // Thymeleaf injects user.id here
+                    var userRole = /*[[${user.role}]]*/ 'defaultRole';
                 </script>
 
                 <div class="dropdown-content">
                     <button onclick="redirectToUserInfo()">Update Information</button>
+                    <button onclick="redirectToChangePass()">Change Password</button>
+                    <button onclick="redirectToViewBooking()">View booking status</button>
                 </div>
 
             </div>
@@ -256,6 +264,17 @@
 
 
         <script>
+            window.onload = function () {
+                // Check if userId and userRole variables are available
+                if (typeof userRole !== 'undefined') {
+                    if (userRole === 'ADMIN') {
+                        // Redirect to the admin page for admin users
+                        window.location.href = `/admin.html`;
+                    }
+                } else {
+                    console.error("User role is not defined.");
+                }
+            };
             function redirectToUserInfo() {
                 // Check if the userId variable is available
                 if (typeof userId !== 'undefined') {
@@ -265,6 +284,21 @@
                     console.error("User ID is not defined.");
                 }
             }
+            function redirectToChangePass() {
+                // Check if the userId variable is available
+                if (typeof userId !== 'undefined') {
+                    // Redirect the user to the URL with the user ID in the query parameter
+                    window.location.href = `/account/changePassword`;
+                }
+            }
+            function redirectToViewBooking() {
+                // Check if the userId variable is available
+                if (typeof userId !== 'undefined') {
+                    // Redirect the user to the URL with the user ID in the query parameter
+                    window.location.href = `/user/getUserBooking`;
+                }
+            }
+
         </script>
 
     </nav>

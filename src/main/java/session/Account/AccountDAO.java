@@ -27,6 +27,7 @@ public class AccountDAO implements DAO<Account, Integer> {
             return Optional.empty();
         }
     }
+
     @Override
     public Optional<Account> findById(Integer id) {
         return Optional.empty();
