@@ -65,7 +65,7 @@ public class RestaurantDAO {
 
     public Optional<Restaurant> findById(int id)  {
         try {
-            String query = "select view_restaurant.* from view_restaurant\n" + "where view_restaurant.restaurant_id = ?";
+            String query = "select restaurant.* from restaurant\n" + "where restaurant.restaurant_id = ?";
             return Optional.ofNullable(jdbcTemplate.queryForObject(query, new Restaurant(), id));
         } catch (Exception e) {
             return Optional.empty();

@@ -115,6 +115,7 @@ public class AccountController {
         redirectAttributes.addFlashAttribute("email", email);
         return "redirect:/account/createUserInformation/"+res.getData().id();
     }
+
     @PutMapping("/changePassword")
     public String update(HttpSession session,@RequestHeader String input) {
         try {

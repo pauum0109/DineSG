@@ -35,40 +35,6 @@ public class UserController {
         this.userInformationRepo = userInformationRepo;
         this.emailService = emailService;
     }
-//    @GetMapping("/getUserBooking")
-//    public String getUserBooking(HttpSession session, @RequestParam(required = false) Integer status, Model model) {
-//        Integer user_id = (Integer) session.getAttribute("user_id");
-//        if (user_id == null) {
-//            return "error";
-//        }
-//        List<bookTableDTO> bookings = bookingService.getUserBooking(user_id, status);
-//        model.addAttribute("bookingTable", bookings);
-//        return "userBooking";
-//    }
-//    @PostMapping("/deleteBooking/{booking_id}")
-//    public void deleteUserBooking(@PathVariable Integer booking_id) {
-//        bookingService.deleteUserBooking(booking_id);
-//
-//    }
-
-//    @GetMapping("/getDetailBooking/{booking_id}")
-//    public String getUserOrderResponse(HttpSession session, Model model, @PathVariable Integer booking_id, @RequestParam String action) {
-//        Integer user_id = (Integer) session.getAttribute("user_id");
-//        bookTableDTO book = bookingService.getOwnerBookingDetail(booking_id);
-//        if(book==null||user_id == null){
-//            return "error";
-//        }
-//        if(Objects.equals(action, "edit")&& Objects.equals(book.getStatus(), "PENDING")){
-//            model.addAttribute("bookingDecision", book);
-//            return "bookDetailUpdate";//Page này cho phép update
-//        }
-//        else if(Objects.equals(action, "view")){
-//            model.addAttribute("bookingDecision", book);
-//            return "bookDetail";//Page này view kèm response if cos
-//        }
-//        return "error";
-//    }
-
 
     @GetMapping("/booking/{restaurant_id}")
     public String createOrder(HttpSession session,@PathVariable String restaurant_id, Model model, @RequestParam(required = true) Integer booking_id) {
@@ -92,8 +58,9 @@ public class UserController {
 
     @GetMapping("/getUserBooking")
     public String getUserBooking(HttpSession session, @RequestParam(required = false) Integer status, Model model) {
-        UserInformation user = userInformationRepo.getUserInformation(8242);
-        List<bookTableDTO> bookings = bookingService.getUserBooking(8242, status);
+        Integer user_id = (Integer) session.getAttribute("user");
+        UserInformation user = userInformationRepo.getUserInformation(user_id);
+        List<bookTableDTO> bookings = bookingService.getUserBooking(user_id, status);
         model.addAttribute("currentStatus", status);
         model.addAttribute("bookingTable", bookings);
         model.addAttribute("user", user);

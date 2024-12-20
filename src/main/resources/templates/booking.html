@@ -228,8 +228,8 @@
         const formObject = {};
         formData.forEach((value, key) => {
             formObject[key] = value;
+            console.log(value);
         });
-
         try {
             const response = await fetch('/user/createOrder', {
                 method: 'POST',

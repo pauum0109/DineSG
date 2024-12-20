@@ -61,34 +61,4 @@ public class UserRestController {
         bookingService.deleteUserBooking(booking_id);
     }
 
-
-
-
-//
-//    @GetMapping("/getUserBooking")
-//    public String getUserBookings(HttpSession session,
-//                                  @RequestParam(required = false) Integer status,
-//                                  @RequestParam(required = false) Integer booking_id,
-//                                  Model model) {
-//        Integer user_id = (Integer) session.getAttribute("user_id");
-//        if(user_id==null){
-//            return "redirect:/login";
-//        }
-//        List<bookTableDTO> bookings = bookingService.getUserBooking(user_id,status);
-//        if (booking_id != null) {
-//            bookings = bookings.stream()
-//                    .filter(booking -> Objects.equals(booking.getBookingId(), booking_id))
-//                    .collect(Collectors.toList());
-//        }
-//
-//        // Add the bookings to the model
-//        model.addAttribute("bookings", bookings);
-//        // Return the JSP view name
-//        return "userBookings";
-//    }
-
-
-
-
-
 }
