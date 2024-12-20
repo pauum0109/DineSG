@@ -31,25 +31,22 @@ public class AccountController {
         return "updateInformation" ;
     }
     @GetMapping("/login")
-    public String login(HttpSession session, Model model, HttpServletResponse response, @RequestParam(value = "username", required = false) String username) {
-        // Prevent caching of the login page
+    public String login(HttpSession session, Model model, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
         Integer userId = (Integer) session.getAttribute("user");
-        if (userId != null) {
-            String loggedInUsername = accountService.getUsernameByUserId(userId);
-            model.addAttribute("username", loggedInUsername);
-            return "redirect:/";
+        String username = (String) session.getAttribute("username");
+
+        if (userId != null && username != null) {
+            model.addAttribute("username", username); // Add username to model
+            return "redirect:/"; // Redirect to home page if already logged in
         }
 
-        if (username != null) {
-            model.addAttribute("username", username); // Add username from flash attributes
-        }
-
-        return "login";
+        return "login"; // Return login page if not logged in
     }
+
 
     @GetMapping("/verifyEmail")
     public String recover() {
@@ -92,16 +89,15 @@ public class AccountController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/login")
     public String loginTest(HttpSession session, @RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
-        State<UserDTO> res = accountService.login(username, password); // Server check
+        State<UserDTO> res = accountService.login(username, password);//Server check
         if (res.getStatus() != Status.SUCCESS) {
-            redirectAttributes.addFlashAttribute("state", res.getStatus().toString()); // Set state
-            return "redirect:/account/login"; // Redirect back to login if login fails
+            redirectAttributes.addFlashAttribute("state", res.getStatus().toString());//Set state
+            return "redirect:/account/login";
         }
-        // If login is successful, create session and store user id.
+
         session.setAttribute("user", res.getData().id());
-        redirectAttributes.addFlashAttribute("username", username); // Add username to flash attributes
-        redirectAttributes.addFlashAttribute("state", res.getStatus().toString()); // Set state
-        return "redirect:/"; // Redirect to home page
+        redirectAttributes.addFlashAttribute("state", res.getStatus().toString());
+        return "redirect:/account/login";
     }
 
     @PostMapping("/register")
@@ -135,4 +131,18 @@ public class AccountController {
         }
         return "error";
     }
+
+    @GetMapping("/info")
+    public String getUserInfo(HttpSession session, Model model) {
+        Integer user = (Integer) session.getAttribute("user");
+        UserInformation userInformation = userInformationRepo.getUserInformation(user);
+        model.addAttribute("userInformation",userInformation);
+
+        if (user == null) {
+            return "redirect:/account/login";
+        }
+
+        return "person";
+    }
+
 }

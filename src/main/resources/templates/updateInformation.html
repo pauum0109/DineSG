@@ -148,6 +148,12 @@
             <p class="error-text" id="message_error"></p>
         </div>
 
+        <!-- User ID Section -->
+        <div class="form-group">
+            <i class="input-icon fa fa-id-badge"></i>
+            <input type="text" id="userId" name="user_id" th:value="${userInformation.user_id}" readonly placeholder="User ID">
+        </div>
+
         <!-- Email Section -->
         <div class="form-group">
             <i class="input-icon fa fa-envelope"></i>
