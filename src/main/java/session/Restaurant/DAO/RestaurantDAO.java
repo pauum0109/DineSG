@@ -72,15 +72,24 @@ public class RestaurantDAO {
         }
     }
 
-    public void insertRestaurant(int owe_id, String res_id, String name, String district, String address, String description,String image, String phoneNumber, String openTime, String closeTime) {
+    public void insertRestaurant(String res_id, String name, String district, String address, String description,String image, String phoneNumber, String openTime, String closeTime) {
         try {
-            String query = "call create_restaurant(? , ? , ? , ? , ? , ? , ? , ? , ?,?)";
-            jdbcTemplate.update(query, owe_id, res_id, name, district, address,description, image, phoneNumber, openTime, closeTime);
+            String query = "insert into restaurant (restaurant_id, restaurant_name, restaurant_district, restaurant_address, restaurant_image, phone_number, open_time, close_time, restaurant_description) VALUES (?,?,?,?,?,?,?,?,?)";
+            jdbcTemplate.update(query, res_id, name, district,address, image, phoneNumber, openTime, closeTime, description);
         } catch (Exception e) {
             return;
         }
-
     }
+
+    public void insertOwnRestaurant(int owerID, int resID) {
+        try {
+           String query = "insert into ownrestaurant (user_id, restaurant_id) VALUES (?, ?)";
+           jdbcTemplate.update(query, owerID, resID);
+        } catch(Exception e) {
+            return;
+        }
+    }
+
     public void removeRestaurant(int res_id)  {
         try {
             String query = "delete from restaurant where restaurant_id = ?";

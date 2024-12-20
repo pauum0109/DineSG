@@ -112,4 +112,25 @@ public class OwnerController {
         }
         return ResponseEntity.badRequest().body("Error");
     }
+
+    @GetMapping("/createRestaurant")
+    public String createRestaurant(Model model){
+        List<District> d = restaurantService.getDistrict();
+        List<Category> c= restaurantService.getCategory();
+        model.addAttribute("districts",d);
+        model.addAttribute("categories",c);
+        return "createRestaurant";
+    }
+
+    @Transactional
+    @PostMapping(value = "/restaurant/create")
+    public ResponseEntity<Object> createRestaurantRequest(
+            HttpSession session,
+            @RequestBody(required = false) RestaurantDTO restaurantDTO
+    ) {
+        Integer owner_id = (Integer) session.getAttribute("user");
+
+        restaurantService.createRestaurant(restaurantDTO, owner_id);
+        return ResponseEntity.ok("Create success");
+    }
 }

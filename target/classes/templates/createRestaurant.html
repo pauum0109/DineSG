@@ -140,98 +140,112 @@
 <div class="card-3d-wrap">
     <div class="card-front">
         <div class="form-heading">Create Restaurant</div>
-        <form class="form-container">
+        <form class="form-container" id="myForm">
             <div class="form-group">
                 <i class="fa fa-cutlery"></i>
-                <input type="text" id="restaurantName" class="form-style" placeholder="Restaurant Name" />
+                <input type="text" id="restaurantName" class="form-style" placeholder="Restaurant Name" name="name" />
             </div>
 
             <div class="form-group">
                 <i class="fa fa-map-marker"></i>
-                <input type="text" id="restaurantAddress" class="form-style" placeholder="Address" />
+                <input type="text" id="restaurantAddress" class="form-style" placeholder="Address" name="address" />
             </div>
 
             <div class="form-group">
                 <i class="fa fa-building"></i>
-                <select id="restaurantDistrict" class="form-style">
-                    <option value="" selected disabled>Select District</option>
-                    <option>District 1</option>
-                    <option>District 2</option>
-                    <option>District 3</option>
-                    <option>District 4</option>
-                    <option>District 5</option>
-                    <option>District 6</option>
-                    <option>District 7</option>
-                    <option>District 8</option>
-                    <option>District 9 (Thu Duc City)</option>
-                    <option>District 10</option>
-                    <option>District 11</option>
-                    <option>District 12</option>
-                    <option>Binh Tan District</option>
-                    <option>Binh Thanh District</option>
-                    <option>Go Vap District</option>
-                    <option>Phu Nhuan District</option>
-                    <option>Tan Binh District</option>
-                    <option>Tan Phu District</option>
-                    <option>Nha Be District</option>
-                    <option>Can Gio District</option>
-                    <option>Cu Chi District</option>
-                    <option>Hoc Mon District</option>
-
-                </select>
+                <label>
+                    <select   class="form-style" name="district" >
+                        <option value="" selected disabled>Select a district</option>
+                        <option th:each="d : ${districts}"
+                                th:value="${d.id}"
+                                th:text="${d.name}"
+                        ></option>
+                    </select>
+                </label>
             </div>
 
             <div class="form-group">
                 <i class="fa fa-image"></i>
-                <input type="text" id="restaurantPicture" class="form-style" placeholder="Picture Link" />
+                <input type="text" id="restaurantPicture" class="form-style" placeholder="Picture Link" name="picture" />
             </div>
 
             <div class="form-group">
                 <i class="fa fa-clock"></i>
-                <input type="time" id="restaurantOpenTime" class="form-style" />
+                <input type="time" id="restaurantOpenTime" class="form-style" name="open_time"/>
             </div>
 
             <div class="form-group">
                 <i class="fa fa-clock"></i>
-                <input type="time" id="restaurantCloseTime" class="form-style" />
+                <input type="time" id="restaurantCloseTime" name="close_time" class="form-style" />
             </div>
 
             <div class="form-group">
                 <i class="fa fa-phone"></i>
-                <input type="tel" id="restaurantPhoneNumber" class="form-style" placeholder="Phone Number" />
+                <input type="tel" id="restaurantPhoneNumber" class="form-style" placeholder="Phone Number" name="phone_number"/>
             </div>
 
             <div class="form-group description">
-                <textarea id="restaurantDescription" class="form-style" placeholder="Description" rows="4"></textarea>
+                <textarea id="restaurantDescription" class="form-style" placeholder="Description" rows="4" name="description"></textarea>
             </div>
 
             <div class="form-group">
                 <div class="category-label">Category</div>
                 <div class="checkbox-container">
                     <div>
-                        <input type="checkbox" id="categoryBar" name="category" value="Bar">
-                        <label for="categoryBar">Bar</label>
+                        <input name="category"
+                               type="checkbox"
+                               th:value="${categories.get(0).category_id.toString}"
+                        >
+                        <label th:text="${categories.get(0).category_name}">
+                        </label>
+
                     </div>
                     <div>
-                        <input type="checkbox" id="categoryCafe" name="category" value="Cafe">
-                        <label for="categoryCafe">Cafe</label>
+                        <input name="category"
+                               type="checkbox"
+                               th:value="${categories.get(1).category_id.toString}"
+                        >
+                        <label th:text="${categories.get(1).category_name}">
+                        </label>
+
                     </div>
                     <div>
-                        <input type="checkbox" id="categoryClub" name="category" value="Club">
-                        <label for="categoryClub">Club</label>
+                        <input name="category"
+                               type="checkbox"
+                               th:value="${categories.get(2).category_id.toString}"
+                        >
+                        <label th:text="${categories.get(2).category_name}">
+                        </label>
+
                     </div>
                     <div>
-                        <input type="checkbox" id="categoryDinner" name="category" value="Dinner">
-                        <label for="categoryDinner">Dinner</label>
+                        <input name="category"
+                               type="checkbox"
+                               th:value="${categories.get(3).category_id.toString}"
+                        >
+                        <label th:text="${categories.get(3).category_name}">
+                        </label>
+
                     </div>
                     <div>
-                        <input type="checkbox" id="categoryEvent" name="category" value="Event">
-                        <label for="categoryEvent">Event</label>
+                        <input name="category"
+                               type="checkbox"
+                               th:value="${categories.get(4).category_id.toString}"
+                        >
+                        <label th:text="${categories.get(4).category_name}">
+                        </label>
+
                     </div>
                     <div>
-                        <input type="checkbox" id="categoryActivity" name="category" value="Activity">
-                        <label for="categoryActivity">Activity</label>
+                        <input name="category"
+                               type="checkbox"
+                               th:value="${categories.get(5).category_id.toString}"
+                        >
+                        <label th:text="${categories.get(5).category_name}">
+                        </label>
+
                     </div>
+
                 </div>
             </div>
 
@@ -242,5 +256,50 @@
     </div>
 </div>
 </body>
+<script>
+
+
+    document.getElementById('myForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const formObject = {};
+
+        // Convert FormData to an object, handling multiple checkboxes
+        formData.forEach((value, key) => {
+            if (key === "category") {
+                if (!formObject[key]) {
+                    formObject[key] = []; // Initialize as an array
+                }
+                formObject[key].push(value); // Add each checked value
+            } else {
+                formObject[key] = value; // Handle other fields
+            }
+        });
+
+        console.log('Submitting:', formObject); // Debug log
+
+        try {
+            const response = await fetch('/admin/restaurant/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formObject), // Send data as JSON
+            });
+
+            if (response.ok) {
+                alert('Form submitted successfully!');
+                window.location.href = '/account/login';
+            } else {
+                const errorText = await response.text(); // Get response error details
+                console.error('Error:', errorText);
+                alert(`Form submission failed! ${errorText}`);
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+            alert('An error occurred!');
+        }
+    });
+</script>
 
 </html>

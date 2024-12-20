@@ -85,8 +85,9 @@ public class RestaurantService {
     }
     @Transactional
     public void createRestaurant(RestaurantDTO restaurant, int owner_id) {
-        restaurantDAO.insertRestaurant(owner_id, restaurant.getRestaurant_id(), restaurant.getName(), restaurant.getDistrict(), restaurant.getAddress(), restaurant.getDescription(), restaurant.getPicture(), restaurant.getPhone_number(), restaurant.getOpen_time(),
+        restaurantDAO.insertRestaurant(restaurant.getRestaurant_id(), restaurant.getName(), restaurant.getDistrict(), restaurant.getAddress(), restaurant.getDescription(), restaurant.getPicture(), restaurant.getPhone_number(), restaurant.getOpen_time(),
                 restaurant.getClose_time());
+        restaurantDAO.insertOwnRestaurant(owner_id, Integer.parseInt(restaurant.getRestaurant_id()));
         insertRestaurantCategories(Integer.parseInt((restaurant.getRestaurant_id())), restaurant.getCategory());
     }
     @Transactional
