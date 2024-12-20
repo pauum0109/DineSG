@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filter Restaurants</title>
+    <link rel="stylesheet" href="/css/coffee.css" />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+            rel="stylesheet"
+    />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #b2744c;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            color: white !important;
+        }
+
+        .filter-section {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #b2744c;
+        }
+
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #f8f9fa, #f1e8d9); /* Soft gradient */
+        }
+
+        .modal-header {
+            background-color: #b2744c;
+            color: white;
+            font-weight: 700;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .square-image {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Makes the image square */
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-text {
+            color: #888;
+        }
+
+        .rating-badge {
+            background-color: #e0a24c;
+            color: white;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+        }
+
+        .no-restaurant-message {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #b2744c;
+        }
+
+        /* Booking Button Style */
+        .btn-booking {
+            background-color: #b2744c;  /* Match the theme color */
+            color: white;
+            font-weight: 600;
+            border-radius: 20px;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-booking:hover {
+            background-color: #e0a24c;  /* Lighter shade for hover effect */
+            color: black;
+            text-decoration: none;
+        }
+
+        .btn-booking:focus {
+            outline: none;
+            box-shadow: 0 0 5px 2px rgba(176, 116, 76, 0.7);  /* Subtle focus effect */
+        }
+
+        /* Modal Image */
+        .img-fluid.rounded-lg {
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="/index">
+        <img src="/assets/logo.png" alt="Dine Saigon Logo">
+        Dine Saigon
+    </a>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Filter Section -->
+        <div class="col-md-3">
+            <div class="filter-section">
+                <h3 class="filter-title">Filters</h3>
+
+                <div class="mb-3">
+                    <h5 class="text-secondary">Categories</h5>
+                    <div id="category-filters" class="form-check">
+                        <!-- Dynamically filled with categories -->
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="text-secondary">Districts</h5>
+                    <div id="district-filters" class="form-check">
+                        <!-- Dynamically filled with districts -->
+                    </div>
+                </div>
+
+                <button id="apply-filters" class="btn btn-primary mt-3 w-100">Apply Filters</button>
+            </div>
+        </div>
+
+        <!-- Restaurants Display Section -->
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="restaurant-list">
+                <!-- Restaurants will be dynamically populated here -->
+            </div>
+
+            <div id="no-restaurants" class="no-restaurant-message" style="display: none;">
+                No restaurants match your filters.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function fetchCategories() {
+        try {
+            const response = await fetch('/getCategory');
+            return response.ok ? await response.json() : [];
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+            return [];
+        }
+    }
+
+    function populateCategoryFilters(categories) {
+        const categoryFilters = document.getElementById("category-filters");
+        categoryFilters.innerHTML = categories.map(category => `
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="category" value="${category.category_id}" id="category-${category.category_id}">
+            <label class="form-check-label" for="category-${category.category_id}">
+                ${category.category_name}
+            </label>
+        </div>
+    `).join("");
+    }
+
+
+
+    async function fetchDistricts() {
+        try {
+            const response = await fetch('/restaurant/getDistrict');
+            return response.ok ? await response.json() : [];
+        } catch (error) {
+            console.error("Error fetching districts:", error);
+            return [];
+        }
+    }
+
+    function populateDistrictFilters(districts) {
+        const districtFilters = document.getElementById("district-filters");
+        districtFilters.innerHTML = districts.map(district => `
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="district" value="${district.id}" id="district-${district.id}">
+            <label class="form-check-label" for="district-${district.id}">${district.name}</label>
+        </div>
+    `).join("");
+    }
+
+    async function fetchRestaurants() {
+        try {
+            const response = await fetch('/restaurant/all');
+            return response.ok ? await response.json() : [];
+        } catch (error) {
+            console.error("Error fetching restaurants:", error);
+            return [];
+        }
+    }
+
+    async function fetchRestaurantsByDistrict(districtId) {
+        try {
+            const response = await fetch(`/restaurant/get/district/${districtId}`);
+            return response.ok ? await response.json() : [];
+        } catch (error) {
+            console.error("Error fetching restaurants by district:", error);
+            return [];
+        }
+    }
+
+    async function fetchRestaurantsByCategory(categoryId) {
+        try {
+            const response = await fetch(`/restaurant/get/category/${categoryId}`);
+            return response.ok ? await response.json() : [];
+        } catch (error) {
+            console.error("Error fetching restaurants by category:", error);
+            return [];
+        }
+    }
+
+    async function handleBooking(restaurant_id, restaurant_name) {
+        console.log(restaurant_id)
+        try {
+            if (!restaurant_id) {
+                console.error("No restaurant ID provided");
+                return;
+            }
+
+            // Make the POST request
+            const postResponse = await fetch(`/user/booking/`+restaurant_id, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!postResponse.ok) {
+                window.open("/account/login", "_blank");  // Open login in a new tab
+                return;
+            }
+
+            const response = await postResponse.json();
+
+            // Open the booking page in a new tab
+            window.open(`/user/booking/${restaurant_id}?restaurant_name=${encodeURIComponent(restaurant_name)}&booking_id=${response.booking_id}`, "_blank");
+        } catch (error) {
+            console.error("Error during booking process:", error);
+            window.open("/error", "_blank");  // Open error page in a new tab
+        }
+    }
+
+    async function fetchRestaurantsByCategoryAndDistrict(categoryId, districtId) {
+        try {
+            const response = await fetch(`/restaurant/get/filter?category=${categoryId}&district=${districtId}`);
+            return response.ok ? await response.json() : [];
+        } catch (error) {
+            console.error("Error fetching restaurants by category and district:", error);
+            return [];
+        }
+    }
+
+    function showRestaurantDetails(restaurant) {
+        const modalBody = document.getElementById("restaurantDetails");
+
+        modalBody.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <img src="${restaurant.imageUrl || '/assets/b1.png'}" class="img-fluid rounded-lg shadow-lg" alt="${restaurant.name}">
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-primary font-weight-bold">${restaurant.name}</h4>
+                <p><strong>Address:</strong> ${restaurant.address}</p>
+                <p><strong>District:</strong> ${restaurant.district}</p>
+                <p><strong>Description:</strong> ${restaurant.description}</p>
+                <p><strong>Open Time:</strong> ${restaurant.openTime}</p>
+                <p><strong>Close Time:</strong> ${restaurant.closeTime}</p>
+                <p><strong>Rating:</strong> ${restaurant.rating}</p>
+                <button class="btn-booking btn btn-primary rounded-pill" onclick="handleBooking(${restaurant.restaurantId}, '${restaurant.name}')">Book a Table</button>
+            </div>
+        </div>
+    `;
+
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('restaurantModal'));
+        modal.show();
+    }
+
+
+    async function applyFilters() {
+        // Get all selected categories (check all selected checkboxes)
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+            .map(input => input.value);
+        // Get all selected districts (check all selected checkboxes)
+        const selectedDistricts = Array.from(document.querySelectorAll('input[name="district"]:checked'))
+            .map(input => input.value);
+
+        let restaurants = [];
+
+        // If both categories and districts are selected
+        if (selectedCategories.length > 0 && selectedDistricts.length > 0) {
+            restaurants = await fetchRestaurantsByCategoryAndDistrict(selectedCategories, selectedDistricts);
+        }
+        // If only categories are selected
+        else if (selectedCategories.length > 0) {
+            restaurants = await fetchRestaurantsByCategory(selectedCategories);
+        }
+        // If only districts are selected
+        else if (selectedDistricts.length > 0) {
+            restaurants = await fetchRestaurantsByDistrict(selectedDistricts);
+        }
+        // If no filters are selected, fetch all restaurants
+        else {
+            restaurants = await fetchRestaurants();
+        }
+
+        const restaurantList = document.getElementById("restaurant-list");
+        const noRestaurantsMessage = document.getElementById("no-restaurants");
+
+        if (restaurants.length > 0) {
+            noRestaurantsMessage.style.display = "none";
+            restaurantList.innerHTML = restaurants.map(restaurant => `
+        <div class="col">
+            <div class="card shadow-sm">
+                <img src="/assets/b1.png" class="square-image" alt="${restaurant.name}" onclick='showRestaurantDetails(${JSON.stringify(restaurant)})'>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-1">${restaurant.name}</h5>
+                    <p class="text-muted small mb-0">${restaurant.district}</p>
+                    <p class="text-muted small">${restaurant.address}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="rating-badge">⭐ ${restaurant.rating.toFixed(1)}</span>
+                        <p class="mb-0 text-muted small">${restaurant.openTime} - ${restaurant.closeTime}</p>
+                    </div>
+                    <!-- Booking Button -->
+                    <a href="javascript:void(0);" class="btn-booking mt-3 w-100" onclick="handleBooking(${restaurant.restaurantId}, '${restaurant.name}')">Booking</a>
+                </div>
+            </div>
+        </div>
+    `).join("");
+        } else {
+            noRestaurantsMessage.style.display = "block";
+            restaurantList.innerHTML = "";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        const districts = await fetchDistricts();
+        populateDistrictFilters(districts);
+
+        // Fetch and populate categories
+        const categories = await fetchCategories();
+        populateCategoryFilters(categories);
+
+        // Show all restaurants at initial state
+        await applyFilters();
+
+        document.getElementById("apply-filters").addEventListener("click", () => {
+            applyFilters();
+        });
+    });
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Modal for restaurant details -->
+<div class="modal fade" id="restaurantModal" tabindex="-1" aria-labelledby="restaurantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="restaurantModalLabel">Restaurant Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="restaurantDetails">
+                <!-- Detailed restaurant information will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

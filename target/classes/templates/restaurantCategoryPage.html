@@ -1,21 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 3 Restaurants</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurants in Category</title>
+    <!-- Link to your custom CSS file (coffee.css) -->
+    <link rel="stylesheet" href="/css/coffee.css" />
     <!-- Bootstrap CSS -->
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
-    >
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+            rel="stylesheet"
+    />
     <style>
-        /* Card Styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin-top: 0; /* Remove top margin */
+            padding-top: 0; /* Remove top padding */
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #b2744c;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        .navbar-brand img {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .navbar-brand {
+            color: white !important; /* Change the text color to white */
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            color: white !important; /* Ensure the hover color is also white */
+        }
+
+        /* Styling the heading */
+        .heading7 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .heading7::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #b2744c;
+            border-radius: 5px;
+        }
+
+        .heading7 span {
+            color: #b2744c;
+        }
+
+        /* Styling for the subheading */
+        .heading7 small {
+            font-size: 1.1rem;
+            color: #777;
+            display: block;
+            margin-top: 10px;
+        }
+
         .card {
             border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
             background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
         }
 
@@ -24,44 +102,25 @@
         }
 
         .card-body {
-            padding: 15px;
-            font-size: 0.875rem;
+            padding: 20px;
+        }
+
+        .square-image {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Makes the image square */
+            object-fit: cover;
         }
 
         .card-title {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            color: #333;
         }
 
-        .card img {
-            border-radius: 15px;
-            transition: transform 0.3s ease;
+        .card-text {
+            color: #888;
         }
 
-        .card img:hover {
-            transform: scale(1.05); /* Zoom effect on hover */
-        }
-
-        .card .btn-booking {
-            background-color: #b2744c;
-            color: white;
-            font-weight: 600;
-            border-radius: 25px;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        .card .btn-booking:hover {
-            background-color: #e0a24c;
-            color: black;
-        }
-
-        .card .btn-booking:focus {
-            outline: none;
-        }
-
-        /* Rating Badge */
         .rating-badge {
             background-color: #e0a24c;
             color: white;
@@ -70,28 +129,33 @@
             border-radius: 5px;
         }
 
-        /* Square Image for Consistency */
-        .square-image {
-            width: 100%;
-            aspect-ratio: 1 / 1; /* Ensures square images */
-            object-fit: cover;
-            border-radius: 15px;
-        }
-
-        /* Heading */
-        .heading7 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        /* Error Message */
         .no-restaurant-message {
             text-align: center;
             font-size: 1.5rem;
             color: #b2744c;
+        }
+
+        /* Booking Button Style */
+        .btn-booking {
+            background-color: #b2744c;  /* Match the theme color */
+            color: white;
+            font-weight: 600;
+            border-radius: 20px;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-booking:hover {
+            background-color: #e0a24c;  /* Lighter shade for hover effect */
+            color: black;
+            text-decoration: none;
+        }
+
+        .btn-booking:focus {
+            outline: none;
+            box-shadow: 0 0 5px 2px rgba(176, 116, 76, 0.7);  /* Subtle focus effect */
         }
 
         .modal-content {
@@ -124,6 +188,7 @@
     </style>
 </head>
 <body>
+
 <!-- Modal for restaurant details -->
 <div class="modal fade" id="restaurantModal" tabindex="-1" aria-labelledby="restaurantModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -142,16 +207,34 @@
     </div>
 </div>
 
-<div class="container mt-4">
-    <div class="heading7">Top 3 Restaurants</div>
+<!-- Navigation Bar with Logo and Title -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="/index">
+        <img src="/assets/logo.png" alt="Dine Saigon Logo">
+        Dine Saigon
+    </a>
+</nav>
+
+<div class="container">
+    <!-- New Heading Style -->
+    <div class="heading7">
+        Restaurants in <span id="category-name"></span> Category
+        <small>Explore the best dining options in this category</small>
+    </div>
 
     <!-- Dynamic restaurant cards -->
-    <div class="row row-cols-1 row-cols-md-3 g-4" id="top-restaurants">
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="restaurant-category">
         <!-- Dynamic content will load here -->
+    </div>
+
+    <!-- Message if no restaurants are found -->
+    <div id="no-restaurants" class="no-restaurant-message" style="display: none;">
+        No restaurants found in this category.
     </div>
 </div>
 
 <script>
+    // Add the handleBooking function here
     async function handleBooking(restaurant_id, restaurant_name) {
         console.log(restaurant_id)
         try {
@@ -210,25 +293,37 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        // Fetch Top 3 Restaurants
-        fetch('/restaurant/top3') // Adjust the backend endpoint for top 3 restaurants
+        const categoryId = window.location.pathname.split('/').pop();
+
+        if (!categoryId) {
+            document.getElementById("restaurant-category").innerHTML = "<p class='text-danger text-center'>No category selected.</p>";
+            return;
+        }
+
+        // Set the category name dynamically
+        document.getElementById("category-name").textContent = categoryId;
+
+        // Fetch restaurants for the selected category
+        fetch(`/restaurant/get/category/${categoryId}`)
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched data:", data); // Log the fetched data to verify
+                console.log("Fetched data:", data);
 
                 if (data && data.length > 0) {
-                    const topContainer = document.getElementById("top-restaurants");
-                    topContainer.innerHTML = ""; // Clear placeholder
+                    const categoryContainer = document.getElementById("restaurant-category");
+                    categoryContainer.innerHTML = "";
 
                     data.forEach(restaurant => {
+                        console.log("Restaurant ID:", restaurant.restaurantId); // Log to verify if the ID is being fetched
+
                         const cardElement = document.createElement('div');
                         cardElement.classList.add('col');
                         cardElement.innerHTML = `
                             <div class="card shadow-sm">
                                 <img
-                                    src="${'assets/b1.png'}"
+                                    src="${'/assets/b1.png'}"
                                     alt="${restaurant.name}"
-                                    class="square-image"
+                                    class="square-image border-end"
                                     onclick='showRestaurantDetails(${JSON.stringify(restaurant)})'>
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold mb-1">${restaurant.name}</h5>
@@ -238,23 +333,26 @@
                                         <span class="rating-badge">⭐ ${restaurant.rating.toFixed(1)}</span>
                                         <p class="mb-0 text-muted small">${restaurant.openTime} - ${restaurant.closeTime}</p>
                                     </div>
+                                    <!-- Booking Button -->
+                                    <a href="javascript:void(0);" class="btn-booking mt-3 w-100" onclick="handleBooking(${restaurant.restaurantId}, '${restaurant.name}')">Booking</a>
                                 </div>
                             </div>
                         `;
-                        topContainer.appendChild(cardElement);
+                        categoryContainer.appendChild(cardElement);
                     });
                 } else {
-                    const topContainer = document.getElementById("top-restaurants");
-                    topContainer.innerHTML = `<p class="no-restaurant-message">No restaurants found.</p>`;
+                    const categoryContainer = document.getElementById("restaurant-category");
+                    categoryContainer.innerHTML = `<p class="text-danger text-center">No restaurants found in this category.</p>`;
                 }
             })
             .catch(error => {
-                console.error("Error fetching top restaurants:", error);
-                const topContainer = document.getElementById("top-restaurants");
-                topContainer.innerHTML = `<p class="no-restaurant-message">Failed to load top restaurants. Please try again later.</p>`;
+                console.error("Error fetching restaurants by category:", error);
+                const categoryContainer = document.getElementById("restaurant-category");
+                categoryContainer.innerHTML = `<p class="text-danger text-center">Failed to load restaurants. Please try again later.</p>`;
             });
     });
 </script>
+
 
 <!-- Bootstrap Bundle with Popper -->
 <script

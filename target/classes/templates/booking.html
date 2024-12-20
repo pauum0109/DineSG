@@ -43,6 +43,14 @@
             color: #fff;
         }
 
+        .restaurant-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #b2744c;
+            text-align: center;
+        }
+
         .form-group {
             position: relative;
             margin-bottom: 20px;
@@ -124,6 +132,13 @@
 <body>
 <div class="booking-container">
     <div class="form-heading">Book Your Table</div>
+
+    <!-- Restaurant Name Display -->
+    <div class="form-group mb-3">
+        <i class="input-icon fa fa-cutlery"></i> <!-- Add an icon for the restaurant name -->
+        <input type="text" id="restaurant-name" name="restaurant-name" class="form-style" placeholder="Restaurant Name" readonly>
+    </div>
+
     <form id="myForm">
         <!-- Name -->
         <div class="form-group mb-3">
@@ -131,8 +146,9 @@
             <input type="text" id="name" name="name" class="form-style" placeholder="Your Name" required>
         </div>
 
-        <input type="hidden" name="booking_id" value="${booking_id}">
-        <input type="hidden" name="restaurant_id" value="${restaurant.restaurant_id}">
+        <!-- Hidden booking_id and restaurant_id -->
+        <input type="hidden" id="booking_id" name="booking_id">
+        <input type="hidden" id="restaurant_id" name="restaurant_id">
 
         <!-- Phone -->
         <div class="form-group mb-3">
@@ -173,6 +189,38 @@
 </div>
 
 <script>
+    // Get the restaurant name dynamically, assuming it's passed in the URL or from server-side
+    document.addEventListener("DOMContentLoaded", () => {
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Extract the values of restaurant_name, booking_id, and restaurant_id from the URL
+        const restaurantName = urlParams.get('restaurant_name');
+        const bookingId = urlParams.get('booking_id');
+        const pathParts = window.location.pathname.split('/');
+        const restaurantId = pathParts[3];
+
+        // Set the values dynamically in the page
+        if (restaurantName) {
+            document.getElementById("restaurant-name").value = decodeURIComponent(restaurantName);  // Display restaurant name
+        } else {
+            console.error("Restaurant name not found in URL");
+        }
+
+        if (bookingId) {
+            document.getElementById("booking_id").value = bookingId;  // Set booking ID in the hidden field
+        } else {
+            console.error("Booking ID not found in URL");
+        }
+
+        if (restaurantId) {
+            document.getElementById("restaurant_id").value = restaurantId;  // Set restaurant ID in the hidden field
+        } else {
+            console.error("Restaurant ID not found in URL");
+        }
+    });
+
+    // Handle form submission
     document.getElementById('myForm').addEventListener('submit', async function (event) {
         event.preventDefault();
         const form = event.target;
@@ -180,8 +228,8 @@
         const formObject = {};
         formData.forEach((value, key) => {
             formObject[key] = value;
+            console.log(value);
         });
-
         try {
             const response = await fetch('/user/createOrder', {
                 method: 'POST',
