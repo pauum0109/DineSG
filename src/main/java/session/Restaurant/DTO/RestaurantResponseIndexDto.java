@@ -14,9 +14,10 @@ public class RestaurantResponseIndexDto {
     private String name;
     private String address;
     private String district;
+    private String description;
     private String picture;
-    private String openTime;  // Using camelCase
-    private String closeTime; // Using camelCase
+    private String openTime;
+    private String closeTime;
     private double rating;
 
     public RestaurantResponseIndexDto(Restaurant restaurant) {
@@ -24,9 +25,10 @@ public class RestaurantResponseIndexDto {
         this.name = restaurant.getName();
         this.address = restaurant.getAddress();
         this.district = restaurant.getDistrict();
+        this.description = restaurant.getDescription();
         this.picture = restaurant.getPicture();
-        this.openTime = restaurant.getOpen_time();  // Convert to camelCase
-        this.closeTime = restaurant.getClose_time(); // Convert to camelCase
+        this.openTime = restaurant.getOpen_time();
+        this.closeTime = restaurant.getClose_time();
         this.rating = restaurant.getRating();
     }
 }

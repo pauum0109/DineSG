@@ -12,11 +12,14 @@
             padding: 0;
             text-align: center;
             background-color: #f9f9f9;
+            font-family: 'Poppins', sans-serif;
         }
 
         h1 {
-            margin-top: 20px;
+            margin-top: 30px;
             color: #333;
+            font-size: 2.5rem;
+            font-weight: bold;
         }
 
         .categories {
@@ -24,7 +27,16 @@
         }
 
         .category {
+            background-color: #fff;
             padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
         .category img {
@@ -32,13 +44,14 @@
             height: 180px;
             object-fit: cover;
             border-radius: 12px;
+            margin-bottom: 15px;
         }
 
         .category p {
-            margin: 10px 0 5px;
+            margin: 10px 0;
+            font-size: 1.2rem;
             font-weight: bold;
-            font-family: 'Roboto', sans-serif;
-            color: black;
+            color: #333;
         }
 
         .category span {
@@ -46,27 +59,37 @@
             font-size: 1em;
         }
 
-        .category:hover {
-            transform: scale(1.05);
-        }
-
         .products {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px auto;
-            max-width: 800px;
+            gap: 15px;
+            margin: 30px auto;
+            max-width: 1000px;
         }
 
         .product-item {
             background: #fff;
-            padding: 10px;
+            padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            width: 200px;
+            width: 220px;
             text-align: center;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -96,9 +119,8 @@
                 categoryDiv.className = 'category text-center';
 
                 categoryDiv.innerHTML = `
-                    <img src="${category.category_image}" alt="${category.category_name}" class="img-fluid mb-2" style="max-height: 150px; object-fit: cover;">
+                    <img src="${category.category_image}" alt="${category.category_name}" class="img-fluid mb-2">
                     <p>${category.category_name}</p>
-                    <span>... result</span>
                 `;
 
                 categoryDiv.addEventListener('click', () => {

@@ -61,6 +61,27 @@
             color: #b2744c;
         }
 
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #f8f9fa, #f1e8d9); /* Soft gradient */
+        }
+
+        .modal-header {
+            background-color: #b2744c;
+            color: white;
+            font-weight: 700;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
         .card {
             border: none;
             border-radius: 10px;
@@ -74,24 +95,32 @@
             transform: translateY(-10px);
         }
 
+        .card-body {
+            padding: 20px;
+        }
+
         .square-image {
             width: 100%;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1 / 1; /* Makes the image square */
             object-fit: cover;
         }
 
-        .btn-booking {
-            background-color: #b2744c;
-            color: white;
+        .card-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            border-radius: 20px;
-            border: none;
-            padding: 10px 20px;
+            color: #333;
         }
 
-        .btn-booking:hover {
+        .card-text {
+            color: #888;
+        }
+
+        .rating-badge {
             background-color: #e0a24c;
-            color: black;
+            color: white;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
         }
 
         .no-restaurant-message {
@@ -99,11 +128,41 @@
             font-size: 1.5rem;
             color: #b2744c;
         }
+
+        /* Booking Button Style */
+        .btn-booking {
+            background-color: #b2744c;  /* Match the theme color */
+            color: white;
+            font-weight: 600;
+            border-radius: 20px;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-booking:hover {
+            background-color: #e0a24c;  /* Lighter shade for hover effect */
+            color: black;
+            text-decoration: none;
+        }
+
+        .btn-booking:focus {
+            outline: none;
+            box-shadow: 0 0 5px 2px rgba(176, 116, 76, 0.7);  /* Subtle focus effect */
+        }
+
+        /* Modal Image */
+        .img-fluid.rounded-lg {
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/index">
         <img src="/assets/logo.png" alt="Dine Saigon Logo">
         Dine Saigon
     </a>
@@ -162,7 +221,7 @@
         const categoryFilters = document.getElementById("category-filters");
         categoryFilters.innerHTML = categories.map(category => `
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="category" value="${category.category_id}" id="category-${category.category_id}">
+            <input class="form-check-input" type="checkbox" name="category" value="${category.category_id}" id="category-${category.category_id}">
             <label class="form-check-label" for="category-${category.category_id}">
                 ${category.category_name}
             </label>
@@ -186,7 +245,7 @@
         const districtFilters = document.getElementById("district-filters");
         districtFilters.innerHTML = districts.map(district => `
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="district" value="${district.id}" id="district-${district.id}">
+            <input class="form-check-input" type="checkbox" name="district" value="${district.id}" id="district-${district.id}">
             <label class="form-check-label" for="district-${district.id}">${district.name}</label>
         </div>
     `).join("");
@@ -263,25 +322,58 @@
         }
     }
 
+    function showRestaurantDetails(restaurant) {
+        const modalBody = document.getElementById("restaurantDetails");
+
+        modalBody.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <img src="${restaurant.imageUrl || '/assets/b1.png'}" class="img-fluid rounded-lg shadow-lg" alt="${restaurant.name}">
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-primary font-weight-bold">${restaurant.name}</h4>
+                <p><strong>Address:</strong> ${restaurant.address}</p>
+                <p><strong>District:</strong> ${restaurant.district}</p>
+                <p><strong>Description:</strong> ${restaurant.description}</p>
+                <p><strong>Open Time:</strong> ${restaurant.openTime}</p>
+                <p><strong>Close Time:</strong> ${restaurant.closeTime}</p>
+                <p><strong>Rating:</strong> ${restaurant.rating}</p>
+                <button class="btn-booking btn btn-primary rounded-pill" onclick="handleBooking(${restaurant.restaurantId}, '${restaurant.name}')">Book a Table</button>
+            </div>
+        </div>
+    `;
+
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('restaurantModal'));
+        modal.show();
+    }
+
 
     async function applyFilters() {
-        const selectedCategory = document.querySelector('input[name="category"]:checked');
-        const selectedDistrict = document.querySelector('input[name="district"]:checked');
-
-        const categoryId = selectedCategory ? selectedCategory.value : null;
-        const districtId = selectedDistrict ? selectedDistrict.value : null;
+        // Get all selected categories (check all selected checkboxes)
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+            .map(input => input.value);
+        // Get all selected districts (check all selected checkboxes)
+        const selectedDistricts = Array.from(document.querySelectorAll('input[name="district"]:checked'))
+            .map(input => input.value);
 
         let restaurants = [];
 
-        // Only apply both filters when both category and district are selected
-        if (categoryId && districtId) {
-            restaurants = await fetchRestaurantsByCategoryAndDistrict(categoryId, districtId);
-        } else if (categoryId) {
-            restaurants = await fetchRestaurantsByCategory(categoryId);
-        } else if (districtId) {
-            restaurants = await fetchRestaurantsByDistrict(districtId);
-        } else {
-            restaurants = await fetchRestaurants(); // Fetch all restaurants if no filters are selected
+        // If both categories and districts are selected
+        if (selectedCategories.length > 0 && selectedDistricts.length > 0) {
+            restaurants = await fetchRestaurantsByCategoryAndDistrict(selectedCategories, selectedDistricts);
+        }
+        // If only categories are selected
+        else if (selectedCategories.length > 0) {
+            restaurants = await fetchRestaurantsByCategory(selectedCategories);
+        }
+        // If only districts are selected
+        else if (selectedDistricts.length > 0) {
+            restaurants = await fetchRestaurantsByDistrict(selectedDistricts);
+        }
+        // If no filters are selected, fetch all restaurants
+        else {
+            restaurants = await fetchRestaurants();
         }
 
         const restaurantList = document.getElementById("restaurant-list");
@@ -290,23 +382,28 @@
         if (restaurants.length > 0) {
             noRestaurantsMessage.style.display = "none";
             restaurantList.innerHTML = restaurants.map(restaurant => `
-            <div class="col">
-                <div class="card">
-                    <img src="${restaurant.imageUrl}" class="square-image" alt="${restaurant.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${restaurant.name}</h5>
-                        <p class="text-muted">${restaurant.address}</p>
-                        <a href="javascript:void(0);" class="btn-booking" onclick="handleBooking(${restaurant.restaurantId}, '${restaurant.name}')">Booking</a>
+        <div class="col">
+            <div class="card shadow-sm">
+                <img src="/assets/b1.png" class="square-image" alt="${restaurant.name}" onclick='showRestaurantDetails(${JSON.stringify(restaurant)})'>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-1">${restaurant.name}</h5>
+                    <p class="text-muted small mb-0">${restaurant.district}</p>
+                    <p class="text-muted small">${restaurant.address}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="rating-badge">⭐ ${restaurant.rating.toFixed(1)}</span>
+                        <p class="mb-0 text-muted small">${restaurant.openTime} - ${restaurant.closeTime}</p>
                     </div>
+                    <!-- Booking Button -->
+                    <a href="javascript:void(0);" class="btn-booking mt-3 w-100" onclick="handleBooking(${restaurant.restaurantId}, '${restaurant.name}')">Booking</a>
                 </div>
             </div>
-        `).join("");
+        </div>
+    `).join("");
         } else {
             noRestaurantsMessage.style.display = "block";
             restaurantList.innerHTML = "";
         }
     }
-
 
     document.addEventListener("DOMContentLoaded", async () => {
         const districts = await fetchDistricts();
@@ -327,5 +424,24 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Modal for restaurant details -->
+<div class="modal fade" id="restaurantModal" tabindex="-1" aria-labelledby="restaurantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="restaurantModalLabel">Restaurant Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="restaurantDetails">
+                <!-- Detailed restaurant information will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>
