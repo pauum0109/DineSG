@@ -1,12 +1,17 @@
 package session.Article;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import session.Booking.DTO.bookTableDTO;
+import session.Booking.DTO.createDecisionDTO;
+import session.Restaurant.DTO.RestaurantDTO;
+
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -32,5 +37,24 @@ public class ArticleController {
     public List<Article> getAllArticles() {
         return articleRepository.findAll();
     }
-
+    @DeleteMapping("/article/{articleId}")
+    public ResponseEntity<Object> deleteArticle(@PathVariable int articleId) {
+        articleRepository.deleteById(articleId);
+        return ResponseEntity.ok().build();
+    }
+    @Transactional
+    @PostMapping(value="/article",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<Object> saveArticle(@ModelAttribute() ArticleDTO articleDTO) {
+        articleRepository.save(ArticleDTO.toEntity(articleDTO));
+        return ResponseEntity.ok().build();
+    }
+    @Transactional
+    @PostMapping(value = "/article/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<Object> updateRestaurant(
+            HttpSession session,
+            @ModelAttribute ArticleDTO articleDTO // For FORM data
+    ) {
+        articleRepository.save(ArticleDTO.toEntity(articleDTO,articleDTO.getArticleId()));
+        return ResponseEntity.ok("Decision updated successfully.");
+    }
 }

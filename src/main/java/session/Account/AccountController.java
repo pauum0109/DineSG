@@ -100,8 +100,10 @@ public class AccountController {
         redirectAttributes.addFlashAttribute("state", res.getStatus().toString());
         Integer userID = (Integer) session.getAttribute("user");
         if (accountService.isAdmin(userID)) {
+            session.setAttribute("role", 0);
             return "redirect:/admin";
         }
+        session.setAttribute("role", 1);
         return "redirect:/index";
     }
 

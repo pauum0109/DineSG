@@ -328,7 +328,7 @@
         modalBody.innerHTML = `
         <div class="row">
             <div class="col-md-6">
-                <img src="${restaurant.imageUrl || '/assets/b1.png'}" class="img-fluid rounded-lg shadow-lg" alt="${restaurant.name}">
+                <img src="${restaurant.picture}" class="img-fluid rounded-lg shadow-lg" alt="${restaurant.name}">
             </div>
             <div class="col-md-6">
                 <h4 class="text-primary font-weight-bold">${restaurant.name}</h4>
@@ -384,11 +384,11 @@
             restaurantList.innerHTML = restaurants.map(restaurant => `
         <div class="col">
             <div class="card shadow-sm">
-                <img src="/assets/b1.png" class="square-image" alt="${restaurant.name}" onclick='showRestaurantDetails(${JSON.stringify(restaurant)})'>
+                <img src="${restaurant.picture}" class="square-image" alt="${restaurant.name}" onclick='showRestaurantDetails(${JSON.stringify(restaurant)})'>
                 <div class="card-body">
                     <h5 class="card-title fw-bold mb-1">${restaurant.name}</h5>
-                    <p class="text-muted small mb-0">${restaurant.district}</p>
-                    <p class="text-muted small">${restaurant.address}</p>
+                    <p class="text-muted small mb-0">District ${restaurant.district}</p>
+                    <p class="text-muted small">Address ${restaurant.address}</p>
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="rating-badge">⭐ ${restaurant.rating.toFixed(1)}</span>
                         <p class="mb-0 text-muted small">${restaurant.openTime} - ${restaurant.closeTime}</p>

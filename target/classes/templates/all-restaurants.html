@@ -63,13 +63,13 @@
                         cardElement.innerHTML = `
                             <div class="card shadow-sm">
                                 <img
-                                    src="${'assets/' + restaurant.picture}"
+                                    src="${restaurant.picture}"
                                     alt="${restaurant.name}"
                                     class="square-image border-end">
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold mb-1">${restaurant.name}</h5>
-                                    <p class="text-muted small mb-0">${restaurant.district}</p>
-                                    <p class="text-muted small">${restaurant.address}</p>
+                                    <p class="text-muted small mb-0">Dictrict ${restaurant.district}</p>
+                                    <p class="text-muted small">Address ${restaurant.address}</p>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span class="rating-badge">⭐ ${restaurant.rating.toFixed(1)}</span>
                                         <p class="mb-0 text-muted small">${restaurant.openTime} - ${restaurant.closeTime}</p>

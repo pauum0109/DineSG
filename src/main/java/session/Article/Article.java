@@ -1,48 +1,29 @@
 package session.Article;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.time.Instant;
+
+@Setter
+@Getter
 @Entity
 @Table(name = "article")
 public class Article {
+    // Getters and Setters
     @Id
     private int articleId;
     private String title;
     private String content;
     private String image;
 
-    // Getters and Setters
-    public int getArticleId() {
-        return articleId;
-    }
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "Updated_at")
+    private Instant updatedAt;
 
-    public void setArticleId(int articleId) {
-        this.articleId = articleId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

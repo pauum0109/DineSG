@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import session.Article.Article;
+import session.Article.ArticleRepository;
 import session.Booking.BookingService;
 import session.Booking.DTO.bookTableDTO;
 import session.Booking.DTO.createDecisionDTO;
@@ -31,10 +33,12 @@ public class OwnerController {
     private final BookingService bookingService;
     private final RestaurantService restaurantService;
     private final EmailService emailService;
-    public OwnerController(BookingService bookingService, RestaurantService restaurantService, EmailService emailService) {
+    private final ArticleRepository articleRepository;
+    public OwnerController(BookingService bookingService, RestaurantService restaurantService, EmailService emailService, ArticleRepository articleRepository) {
         this.bookingService = bookingService;
         this.restaurantService = restaurantService;
         this.emailService = emailService;
+        this.articleRepository = articleRepository;
     }
 
     @GetMapping("/getBookingOrder")
@@ -51,6 +55,7 @@ public class OwnerController {
         model.addAttribute("currentStatus", status);
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("categories", categories);
+
 
         List<District>  districts = restaurantService.getDistrict();
         if(restaurant_id != null) {
@@ -132,5 +137,16 @@ public class OwnerController {
 
         restaurantService.createRestaurant(restaurantDTO, owner_id);
         return ResponseEntity.ok("Create success");
+    }
+
+    @GetMapping("/editArticle")
+    public String showEditArticlePage(HttpSession session,Model model) {
+//        Integer role = (Integer) session.getAttribute("role");
+//        if(role != 0) {
+//            return "error";
+//        }
+        List<Article> articles = articleRepository.findAll();
+        model.addAttribute("articles", articles);
+        return "editArticle";
     }
 }
